@@ -1,11 +1,8 @@
 *.js
-!/lib/frontend-config-custom-resource/config-creator-lambda/index.js
-!/lib/frontend-config-custom-resource/config-creator-lambda/service-config-creator.js
-!/lib/frontend-config-custom-resource/config-creator-lambda/front-ends/*
 !jest.config.js
 *.d.ts
 node_modules
-
+/amplify-stuff
 # CDK asset staging directory
 .cdk.staging
 cdk.out

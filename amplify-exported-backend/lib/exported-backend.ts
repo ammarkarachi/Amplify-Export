@@ -1,4 +1,4 @@
-import { IBucket } from "@aws-cdk/aws-s3";
+import { Bucket, IBucket } from "@aws-cdk/aws-s3";
 import {
   CfnInclude,
   IncludedNestedStack,
@@ -24,11 +24,6 @@ export interface AmplifyExportedBackendProps {
    * ex: ./amplify-synth-out/
    */
   readonly path: string;
-
-  /**
-   * 
-   */
-  readonly bucket?: IBucket;
 }
 
 export enum FrontendType {}
@@ -85,10 +80,11 @@ export class AmplifyExportedBackend
     const amplifyBackend = JSON.parse(
       fs.readFileSync(manifestPath, { encoding: "utf-8" })
     ) as ExportManifest;
-
+      
     const categoryStackMappings = JSON.parse(
       fs.readFileSync(categoryStackMapping, { encoding: "utf-8" })
     ) as CategoryStackMapping[];
+
     const stackProps = amplifyBackend.props;
     const deploymentBucketName = stackProps.parameters
       ? stackProps.parameters["DeploymentBucketName"]
@@ -97,19 +93,34 @@ export class AmplifyExportedBackend
     const stack = new cdk.Stack(scope, "AmplifyStack", {
       stackName: amplifyBackend.stackName,
     });
-
-    createAssetsAndUpdateParameters(
+    const bucket = Bucket.fromBucketName(
       stack,
-      amplifyBackend.props,
-      categoryStackMappings,
-      basePath
+      "deploymentBucket",
+      deploymentBucketName
     );
-
+    const categoryStackMappingWithDepoyments =createAssetsAndUpdateParameters(
+       stack,
+       amplifyBackend.props,
+       categoryStackMappings,
+       basePath,
+       bucket
+     );
     const include = new CfnInclude(
       stack,
       "AmplifyInclude",
       amplifyBackend.props
     );
+    categoryStackMappingWithDepoyments.forEach(stackMapping => {
+      if (stackMapping.bucketDeployment) {
+        const stack = include.getResource(stackMapping.category + stackMapping.resourceName);
+        stack.node.addDependency(stackMapping.bucketDeployment);
+      }
+    })
+    
+    
+
+   
+    
   }
 
   getNestedStacksOutPutByCategory(
