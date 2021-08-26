@@ -10,7 +10,7 @@ import { AmplifyExportedBackendProps } from "./amplify-exported-backend-props";
 import { createAssetsAndUpdateParameters } from "./asset-manager";
 import { BaseAmplifyExportBackend } from "./base-exported-backend";
 import { Constants } from "./constants";
-import { APIGraphQLIncludedNestedStack, AuthIncludedNestedStack, IAPIGraphQLIncludeNestedStack, IAuthIncludeNestedStack } from "./include-nested-stacks";
+import { APIGraphQLIncludedNestedStack, APIRestIncludedStack, AuthIncludedNestedStack, IAPIGraphQLIncludeNestedStack, IAPIRestIncludedStack, IAuthIncludeNestedStack } from "./include-nested-stacks";
 import { ILambdaFunctionIncludedNestedStack, LambdaFunctionIncludedNestedStack } from "./include-nested-stacks/lambda-function/lambda-function-nested-stack";
 import { CategoryStackMapping } from "./types/category-stack-mapping";
 import { ExportManifest } from "./types/export-manifest";
@@ -22,6 +22,9 @@ const {
   FUNCTION_CATEGORY
 } = Constants;
 
+/**
+ * Represents the Amplify Exported Backend Stack
+ */
 export interface IAmplifyExportedBackend {
   /**
    * Used to get the auth stack
@@ -36,6 +39,14 @@ export interface IAmplifyExportedBackend {
    * @throws {AmplifyCategoryNotFoundError} if the API graphql stack doesn't exist
    */
   getAPIGraphQLNestedStacks(): IAPIGraphQLIncludeNestedStack;
+
+  /**
+   * Used to get rest api stack from the backend
+   * @param resourceName
+   * @return {IAPIRestIncludedStack} the nested of type Rest API
+   * @throws {AmplifyCategoryNotFoundError} if the API Rest stack doesn't exist
+   */
+  getAPIRestNestedStack(resourceName: string): IAPIRestIncludedStack;
 
   /**
    * Used to get a specific lambda function from the backend
@@ -55,7 +66,7 @@ export interface IAmplifyExportedBackend {
   getLambdaFunctionNestedStacks(): ILambdaFunctionIncludedNestedStack[];
 
   /**
-   * Return the stacks defined in the backend 
+   * Return the stacks defined in the backend
    * @param category of the categories defined in Amplify CLI like function, api, auth etc
    * @param resourceName @default is undefined
    */
@@ -121,7 +132,6 @@ export class AmplifyExportedBackend
       }
     });
   }
-
 
   private readExportedFileData(props: AmplifyExportedBackendProps) {
     const basePath = path.resolve(props.path);
@@ -223,16 +233,35 @@ export class AmplifyExportedBackend
       .map((stack) => new LambdaFunctionIncludedNestedStack(stack));
   }
 
-  getLambdaFunctionNestedStackByName(functionName: string): ILambdaFunctionIncludedNestedStack {
-    const category = this.findResourceForNestedStack(FUNCTION_CATEGORY.NAME, FUNCTION_CATEGORY.SERVICE.LAMBDA_FUNCTION, functionName);
-    return new LambdaFunctionIncludedNestedStack(this.getCategoryNestedStack(category));
+  getLambdaFunctionNestedStackByName(
+    functionName: string
+  ): ILambdaFunctionIncludedNestedStack {
+    const category = this.findResourceForNestedStack(
+      FUNCTION_CATEGORY.NAME,
+      FUNCTION_CATEGORY.SERVICE.LAMBDA_FUNCTION,
+      functionName
+    );
+    return new LambdaFunctionIncludedNestedStack(
+      this.getCategoryNestedStack(category)
+    );
   }
 
   getNestedStacksByCategory(
     category: string,
     resourceName?: string
   ): IncludedNestedStack[] {
-    return this.filterCategory(category, undefined, resourceName)
-      .map(this.getCategoryNestedStack);
+    return this.filterCategory(category, undefined, resourceName).map(
+      this.getCategoryNestedStack
+    );
+  }
+
+  getAPIRestNestedStack(resourceName: string): IAPIRestIncludedStack {
+    const categoryStackMapping = this.findResourceForNestedStack(
+      API_CATEGORY.NAME,
+      API_CATEGORY.SERVICE.API_GATEWAY,
+      resourceName
+    );
+    const stack = this.getCategoryNestedStack(categoryStackMapping);
+    return new APIRestIncludedStack(stack, resourceName);
   }
 }
