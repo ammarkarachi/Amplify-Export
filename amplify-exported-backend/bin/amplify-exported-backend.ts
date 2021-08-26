@@ -11,3 +11,4 @@ const amplifyBackend = new AmplifyExportedBackend(app, "AmplifyBackend", {
 });
 
 amplifyBackend.getAuthNestedStack().getIdentityPool();
+amplifyBackend.getAPIGraphQLNestedStacks()
