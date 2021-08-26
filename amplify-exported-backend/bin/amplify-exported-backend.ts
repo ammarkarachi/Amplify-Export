@@ -8,7 +8,6 @@ const app = new cdk.App();
 const amplifyBackend = new AmplifyExportedBackend(app, "AmplifyBackend", {
   stage: 'dev',
   path: "./amplify-stuff",
-
-})
+});
 
 amplifyBackend.getAuthNestedStack().getIdentityPool();

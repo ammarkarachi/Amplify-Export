@@ -11,16 +11,18 @@ export class AmplifyCategoryNotFoundError extends Error {
 }
 
 export class BaseAmplifyExportBackend extends Construct {
-  categoryStackMappings: CategoryStackMapping[];
-  cfnInclude: CfnInclude;
+  protected categoryStackMappings: CategoryStackMapping[];
+  protected cfnInclude: CfnInclude;
 
 
-  findResourceForNestedStack(
+  protected findResourceForNestedStack(
     category: string,
-    service: string
+    service: string,
+    resourceName?: string,
+
   ): CategoryStackMapping {
     const categoryStack = this.categoryStackMappings.find(
-      (r) => r.category === category && r.service === service
+      (r) => r.category === category && r.service === service && (resourceName ? r.resourceName === resourceName : true)
     );
     if (!categoryStack) {
       throw new AmplifyCategoryNotFoundError(category, service);
@@ -28,15 +30,15 @@ export class BaseAmplifyExportBackend extends Construct {
     return categoryStack;
   }
   
-  filterCategory(category: string, service?: string): CategoryStackMapping[] {
-    const categoryStackMapping = this.categoryStackMappings.filter(r => r.category === category && (service? r.service === service : true));
+  protected filterCategory(category: string, service?: string, resourceName? : string): CategoryStackMapping[] {
+    const categoryStackMapping = this.categoryStackMappings.filter(r => r.category === category && (service? r.service === service : true) && (resourceName? r.resourceName === resourceName : true));
     if (categoryStackMapping.length === 0) {
       throw new AmplifyCategoryNotFoundError(category, service);
     }
     return categoryStackMapping;
   }
 
-  getCategoryNestedStack(categoryStackMapping: CategoryStackMapping): IncludedNestedStack {
+  protected getCategoryNestedStack(categoryStackMapping: CategoryStackMapping): IncludedNestedStack {
     return this.cfnInclude.getNestedStack(categoryStackMapping.category + categoryStackMapping.resourceName);
   }
 }

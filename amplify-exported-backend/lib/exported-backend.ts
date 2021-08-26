@@ -23,16 +23,6 @@ const {
 } = Constants;
 
 export interface IAmplifyExportedBackend {
-  getNestedStacksByCategory(
-    category: String,
-    categoryName?: string
-  ): IncludedNestedStack[];
-
-  getNestedStacksOutPutByCategory(
-    category: String,
-    categoryName: string
-  ): cdk.CfnOutput[];
-
   /**
    * Used to get the auth stack
    * @returns the nested stack of type {IAuthIncludeNestedStack}
@@ -41,20 +31,44 @@ export interface IAmplifyExportedBackend {
   getAuthNestedStack(): IAuthIncludeNestedStack;
 
   /**
-   * Used to get the api graphql stack
+   * Used to get the api graphql stack from the backend
    * @returns the nested stack of type {IAPIGraphQLIncludeNestedStack}
    * @throws {AmplifyCategoryNotFoundError} if the API graphql stack doesn't exist
    */
-  getAPIGraphQLNestedStack(): IAPIGraphQLIncludeNestedStack;
+  getAPIGraphQLNestedStacks(): IAPIGraphQLIncludeNestedStack;
 
-  getLambdaFunctionNestedStack(): ILambdaFunctionIncludedNestedStack[];
+  /**
+   * Used to get a specific lambda function from the backend
+   * @returns {ILambdaFunctionIncludedNestedStack}
+   * @param functionName the function name to get from the nested stack
+   * @throws {AmplifyCategoryNotFoundError} if the lambda function stack doesn't exist
+   */
+  getLambdaFunctionNestedStackByName(
+    functionName: string
+  ): ILambdaFunctionIncludedNestedStack;
+
+  /**
+   * Used to get all the lambda functions from the backend
+   * @returns {ILambdaFunctionIncludedNestedStack[]}
+   * @throws {AmplifyCategoryNotFoundError} if the no Lambda Function stacks are found
+   */
+  getLambdaFunctionNestedStacks(): ILambdaFunctionIncludedNestedStack[];
+
+  /**
+   * Return the stacks defined in the backend 
+   * @param category of the categories defined in Amplify CLI like function, api, auth etc
+   * @param resourceName @default is undefined
+   */
+  getNestedStacksByCategory(
+    category: string,
+    resourceName?: string
+  ): IncludedNestedStack[];
 }
 
 export class AmplifyExportedBackend
   extends BaseAmplifyExportBackend
   implements IAmplifyExportedBackend
 {
-
   constructor(
     scope: cdk.Construct,
     id: string,
@@ -65,14 +79,12 @@ export class AmplifyExportedBackend
     const { categoryStackMappings, amplifyBackend, basePath } =
       this.readExportedFileData(props);
 
-
-
     this.categoryStackMappings = categoryStackMappings;
     const stackProps = amplifyBackend.props;
     const deploymentBucketName = stackProps.parameters
       ? stackProps.parameters["DeploymentBucketName"]
       : undefined;
-    
+
     assert(deploymentBucketName);
 
     const stack = new cdk.Stack(scope, "AmplifyStack", {
@@ -80,19 +92,18 @@ export class AmplifyExportedBackend
       stackName: amplifyBackend.stackName,
     });
 
-    
     const bucket = Bucket.fromBucketName(
       stack,
       "deploymentBucket",
       deploymentBucketName
     );
     const categoryStackMappingWithDepoyments = createAssetsAndUpdateParameters(
-       stack,
-       amplifyBackend.props,
-       categoryStackMappings,
-       basePath,
-       bucket
-     );
+      stack,
+      amplifyBackend.props,
+      categoryStackMappings,
+      basePath,
+      bucket
+    );
     const include = new CfnInclude(
       stack,
       "AmplifyInclude",
@@ -101,14 +112,16 @@ export class AmplifyExportedBackend
     this.cfnInclude = include;
 
     // add dependency to nested stack for each deployment
-    categoryStackMappingWithDepoyments.forEach(stackMapping => {
+    categoryStackMappingWithDepoyments.forEach((stackMapping) => {
       if (stackMapping.bucketDeployment) {
-        const stack = include.getResource(stackMapping.category + stackMapping.resourceName);
+        const stack = include.getResource(
+          stackMapping.category + stackMapping.resourceName
+        );
         stack.node.addDependency(stackMapping.bucketDeployment);
       }
-    })
-    
+    });
   }
+
 
   private readExportedFileData(props: AmplifyExportedBackendProps) {
     const basePath = path.resolve(props.path);
@@ -143,66 +156,83 @@ export class AmplifyExportedBackend
     return { categoryStackMappings, amplifyBackend, basePath };
   }
 
-  private updatePropsToIncludeEnv(exportManifest: ExportManifest, env: string = 'dev'): ExportManifest {
+  private updatePropsToIncludeEnv(
+    exportManifest: ExportManifest,
+    env: string = "dev"
+  ): ExportManifest {
     const props = exportManifest.props;
-    const splitValues = exportManifest.stackName.split('-');
+    const splitValues = exportManifest.stackName.split("-");
     splitValues[2] = env;
-    exportManifest.stackName = splitValues.join('-');
+    exportManifest.stackName = splitValues.join("-");
     if (!props.parameters) {
       throw new Error("Root Stack Parameters cannot be null");
     }
-    const parameterKeysToUpdate = ["AuthRoleName", "UnauthRoleName", "DeploymentBucketName"];
+    const parameterKeysToUpdate = [
+      "AuthRoleName",
+      "UnauthRoleName",
+      "DeploymentBucketName",
+    ];
 
     for (const parameterKey of parameterKeysToUpdate) {
       if (parameterKey in props.parameters) {
         const val = props.parameters[parameterKey];
-        const values = val.split('-');
+        const values = val.split("-");
         values[2] = env;
-        props.parameters[parameterKey] = values.join('-');
+        props.parameters[parameterKey] = values.join("-");
       } else {
         throw new Error(`${parameterKey} not present in Root Stack Parameters`);
-      }   
+      }
     }
     const nestedStacks = props.loadNestedStacks;
     if (nestedStacks) {
-      Object.keys(nestedStacks).forEach(nestedStackKey => {
+      Object.keys(nestedStacks).forEach((nestedStackKey) => {
         const nestedStack = nestedStacks[nestedStackKey];
         if (nestedStack.parameters) {
-          nestedStack.parameters['env'] = env;
+          nestedStack.parameters["env"] = env;
         }
-      })
+      });
     }
     return exportManifest;
-
   }
 
   getAuthNestedStack(): IAuthIncludeNestedStack {
-    const cognitoResource = this.findResourceForNestedStack(AUTH_CATEGORY.NAME, AUTH_CATEGORY.SERVICE.COGNITO);
+    const cognitoResource = this.findResourceForNestedStack(
+      AUTH_CATEGORY.NAME,
+      AUTH_CATEGORY.SERVICE.COGNITO
+    );
     const stack = this.getCategoryNestedStack(cognitoResource);
     return new AuthIncludedNestedStack(stack);
   }
 
-  getAPIGraphQLNestedStack(): IAPIGraphQLIncludeNestedStack {
-    const categoryStackMapping = this.findResourceForNestedStack(API_CATEGORY.NAME, API_CATEGORY.SERVICE.APP_SYNC);
-    return new APIGraphQLIncludedNestedStack(this.getCategoryNestedStack(categoryStackMapping))
+  getAPIGraphQLNestedStacks(): IAPIGraphQLIncludeNestedStack {
+    const categoryStackMapping = this.findResourceForNestedStack(
+      API_CATEGORY.NAME,
+      API_CATEGORY.SERVICE.APP_SYNC
+    );
+    return new APIGraphQLIncludedNestedStack(
+      this.getCategoryNestedStack(categoryStackMapping)
+    );
   }
 
-  getLambdaFunctionNestedStack(): ILambdaFunctionIncludedNestedStack[] {
-    return  this.filterCategory(FUNCTION_CATEGORY.NAME, FUNCTION_CATEGORY.SERVICE.LAMBDA_FUNCTION)
+  getLambdaFunctionNestedStacks(): ILambdaFunctionIncludedNestedStack[] {
+    return this.filterCategory(
+      FUNCTION_CATEGORY.NAME,
+      FUNCTION_CATEGORY.SERVICE.LAMBDA_FUNCTION
+    )
       .map(this.getCategoryNestedStack)
-      .map(stack => new LambdaFunctionIncludedNestedStack(stack))
+      .map((stack) => new LambdaFunctionIncludedNestedStack(stack));
   }
 
-  getNestedStacksOutPutByCategory(
-    category: String,
-    categoryName: string
-  ): cdk.CfnOutput[] {
-    throw new Error("Method not implemented.");
+  getLambdaFunctionNestedStackByName(functionName: string): ILambdaFunctionIncludedNestedStack {
+    const category = this.findResourceForNestedStack(FUNCTION_CATEGORY.NAME, FUNCTION_CATEGORY.SERVICE.LAMBDA_FUNCTION, functionName);
+    return new LambdaFunctionIncludedNestedStack(this.getCategoryNestedStack(category));
   }
+
   getNestedStacksByCategory(
-    category: String,
-    categoryName?: string
+    category: string,
+    resourceName?: string
   ): IncludedNestedStack[] {
-    throw new Error("Method not implemented.");
+    return this.filterCategory(category, undefined, resourceName)
+      .map(this.getCategoryNestedStack);
   }
 }
