@@ -5,8 +5,10 @@ import { AmplifyExportedBackend } from '../lib/exported-backend';
 
 const app = new cdk.App();
 
-new AmplifyExportedBackend(app, "AmplifyBackend", {
-  env: 'dev',
+const amplifyBackend = new AmplifyExportedBackend(app, "AmplifyBackend", {
+  stage: 'dev',
   path: "./amplify-stuff",
 
 })
+
+amplifyBackend.getAuthNestedStack().getIdentityPool();

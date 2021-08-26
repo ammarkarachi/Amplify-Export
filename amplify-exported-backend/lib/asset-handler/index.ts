@@ -1,5 +1,5 @@
 import { CfnIncludeProps } from "@aws-cdk/cloudformation-include";
-import { Constants } from "../Constants";
+import { Constants } from "../constants";
 import * as path from "path";
 import * as fs from "fs-extra";
 import { BucketDeployment, Source } from "@aws-cdk/aws-s3-deployment";

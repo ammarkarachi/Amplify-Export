@@ -1,37 +1,31 @@
-import { Bucket, IBucket } from "@aws-cdk/aws-s3";
+import { Bucket } from "@aws-cdk/aws-s3";
 import {
   CfnInclude,
   IncludedNestedStack,
 } from "@aws-cdk/cloudformation-include";
 import * as cdk from "@aws-cdk/core";
-import { assert } from "console";
 import * as fs from "fs-extra";
 import * as path from "path";
+import { AmplifyExportedBackendProps } from "./amplify-exported-backend-props";
 import { createAssetsAndUpdateParameters } from "./asset-manager";
-import { Constants } from "./Constants";
+import { BaseAmplifyExportBackend } from "./base-exported-backend";
+import { Constants } from "./constants";
+import { APIGraphQLIncludedNestedStack, AuthIncludedNestedStack, IAPIGraphQLIncludeNestedStack, IAuthIncludeNestedStack } from "./include-nested-stacks";
+import { ILambdaFunctionIncludedNestedStack, LambdaFunctionIncludedNestedStack } from "./include-nested-stacks/lambda-function/lambda-function-nested-stack";
 import { CategoryStackMapping } from "./types/category-stack-mapping";
 import { ExportManifest } from "./types/export-manifest";
-export interface AmplifyExportedBackendProps {
-  /**
-   * The Amplify CLI environment that you would like to incorporate
-   * see https://docs.amplify.aws/cli/teams/overview
-   *
-   */
-  readonly env: string;
+const assert = require("assert");
 
-  /**
-   * The path to the synthesized folder that contains the artifacts for the Amplify CLI backend
-   * ex: ./amplify-synth-out/
-   */
-  readonly path: string;
-}
-
-export enum FrontendType {}
+const {
+  API_CATEGORY,
+  AUTH_CATEGORY,
+  FUNCTION_CATEGORY
+} = Constants;
 
 export interface IAmplifyExportedBackend {
   getNestedStacksByCategory(
     category: String,
-    categoryName: string
+    categoryName?: string
   ): IncludedNestedStack[];
 
   getNestedStacksOutPutByCategory(
@@ -39,66 +33,60 @@ export interface IAmplifyExportedBackend {
     categoryName: string
   ): cdk.CfnOutput[];
 
-  generateExport(
-    frontEndType: FrontendType,
-    props: { objectKey: String }
-  ): void;
+  /**
+   * Used to get the auth stack
+   * @returns the nested stack of type {IAuthIncludeNestedStack}
+   * @throws {AmplifyCategoryNotFoundError} if the auth stack doesn't exist
+   */
+  getAuthNestedStack(): IAuthIncludeNestedStack;
+
+  /**
+   * Used to get the api graphql stack
+   * @returns the nested stack of type {IAPIGraphQLIncludeNestedStack}
+   * @throws {AmplifyCategoryNotFoundError} if the API graphql stack doesn't exist
+   */
+  getAPIGraphQLNestedStack(): IAPIGraphQLIncludeNestedStack;
+
+  getLambdaFunctionNestedStack(): ILambdaFunctionIncludedNestedStack[];
 }
 
 export class AmplifyExportedBackend
-  extends cdk.Construct
+  extends BaseAmplifyExportBackend
   implements IAmplifyExportedBackend
 {
+
   constructor(
     scope: cdk.Construct,
     id: string,
     props: AmplifyExportedBackendProps
   ) {
     super(scope, id);
-    const basePath = path.resolve(props.path);
-    const manifestPath = path.join(
-      basePath,
-      Constants.AMPLIFY_EXPORT_MANIFEST_FILE
-    );
-    const categoryStackMapping = path.join(
-      basePath,
-      Constants.AMPLIFY_CATEGORY_MAPPING_FILE
-    );
 
-    if (!fs.existsSync(manifestPath)) {
-      throw new Error(
-        `${Constants.AMPLIFY_EXPORT_MANIFEST_FILE} file does not exist`
-      );
-    }
+    const { categoryStackMappings, amplifyBackend, basePath } =
+      this.readExportedFileData(props);
 
-    if (!fs.existsSync(categoryStackMapping)) {
-      throw new Error(
-        `${Constants.AMPLIFY_CATEGORY_MAPPING_FILE} file does not exist`
-      );
-    }
 
-    const amplifyBackend = JSON.parse(
-      fs.readFileSync(manifestPath, { encoding: "utf-8" })
-    ) as ExportManifest;
-      
-    const categoryStackMappings = JSON.parse(
-      fs.readFileSync(categoryStackMapping, { encoding: "utf-8" })
-    ) as CategoryStackMapping[];
 
+    this.categoryStackMappings = categoryStackMappings;
     const stackProps = amplifyBackend.props;
     const deploymentBucketName = stackProps.parameters
       ? stackProps.parameters["DeploymentBucketName"]
       : undefined;
+    
     assert(deploymentBucketName);
+
     const stack = new cdk.Stack(scope, "AmplifyStack", {
+      ...props,
       stackName: amplifyBackend.stackName,
     });
+
+    
     const bucket = Bucket.fromBucketName(
       stack,
       "deploymentBucket",
       deploymentBucketName
     );
-    const categoryStackMappingWithDepoyments =createAssetsAndUpdateParameters(
+    const categoryStackMappingWithDepoyments = createAssetsAndUpdateParameters(
        stack,
        amplifyBackend.props,
        categoryStackMappings,
@@ -110,6 +98,9 @@ export class AmplifyExportedBackend
       "AmplifyInclude",
       amplifyBackend.props
     );
+    this.cfnInclude = include;
+
+    // add dependency to nested stack for each deployment
     categoryStackMappingWithDepoyments.forEach(stackMapping => {
       if (stackMapping.bucketDeployment) {
         const stack = include.getResource(stackMapping.category + stackMapping.resourceName);
@@ -117,10 +108,89 @@ export class AmplifyExportedBackend
       }
     })
     
-    
+  }
 
-   
-    
+  private readExportedFileData(props: AmplifyExportedBackendProps) {
+    const basePath = path.resolve(props.path);
+    const manifestPath = path.join(
+      basePath,
+      Constants.AMPLIFY_EXPORT_MANIFEST_FILE
+    );
+    const categoryStackMappingFile = path.join(
+      basePath,
+      Constants.AMPLIFY_CATEGORY_MAPPING_FILE
+    );
+
+    if (!fs.existsSync(manifestPath)) {
+      throw new Error(
+        `${Constants.AMPLIFY_EXPORT_MANIFEST_FILE} file does not exist`
+      );
+    }
+
+    if (!fs.existsSync(categoryStackMappingFile)) {
+      throw new Error(
+        `${Constants.AMPLIFY_CATEGORY_MAPPING_FILE} file does not exist`
+      );
+    }
+    const amplifyBackend = JSON.parse(
+      fs.readFileSync(manifestPath, { encoding: "utf-8" })
+    ) as ExportManifest;
+
+    this.updatePropsToIncludeEnv(amplifyBackend, props.stage);
+    const categoryStackMappings = JSON.parse(
+      fs.readFileSync(categoryStackMappingFile, { encoding: "utf-8" })
+    ) as CategoryStackMapping[];
+    return { categoryStackMappings, amplifyBackend, basePath };
+  }
+
+  private updatePropsToIncludeEnv(exportManifest: ExportManifest, env: string = 'dev'): ExportManifest {
+    const props = exportManifest.props;
+    const splitValues = exportManifest.stackName.split('-');
+    splitValues[2] = env;
+    exportManifest.stackName = splitValues.join('-');
+    if (!props.parameters) {
+      throw new Error("Root Stack Parameters cannot be null");
+    }
+    const parameterKeysToUpdate = ["AuthRoleName", "UnauthRoleName", "DeploymentBucketName"];
+
+    for (const parameterKey of parameterKeysToUpdate) {
+      if (parameterKey in props.parameters) {
+        const val = props.parameters[parameterKey];
+        const values = val.split('-');
+        values[2] = env;
+        props.parameters[parameterKey] = values.join('-');
+      } else {
+        throw new Error(`${parameterKey} not present in Root Stack Parameters`);
+      }   
+    }
+    const nestedStacks = props.loadNestedStacks;
+    if (nestedStacks) {
+      Object.keys(nestedStacks).forEach(nestedStackKey => {
+        const nestedStack = nestedStacks[nestedStackKey];
+        if (nestedStack.parameters) {
+          nestedStack.parameters['env'] = env;
+        }
+      })
+    }
+    return exportManifest;
+
+  }
+
+  getAuthNestedStack(): IAuthIncludeNestedStack {
+    const cognitoResource = this.findResourceForNestedStack(AUTH_CATEGORY.NAME, AUTH_CATEGORY.SERVICE.COGNITO);
+    const stack = this.getCategoryNestedStack(cognitoResource);
+    return new AuthIncludedNestedStack(stack);
+  }
+
+  getAPIGraphQLNestedStack(): IAPIGraphQLIncludeNestedStack {
+    const categoryStackMapping = this.findResourceForNestedStack(API_CATEGORY.NAME, API_CATEGORY.SERVICE.APP_SYNC);
+    return new APIGraphQLIncludedNestedStack(this.getCategoryNestedStack(categoryStackMapping))
+  }
+
+  getLambdaFunctionNestedStack(): ILambdaFunctionIncludedNestedStack[] {
+    return  this.filterCategory(FUNCTION_CATEGORY.NAME, FUNCTION_CATEGORY.SERVICE.LAMBDA_FUNCTION)
+      .map(this.getCategoryNestedStack)
+      .map(stack => new LambdaFunctionIncludedNestedStack(stack))
   }
 
   getNestedStacksOutPutByCategory(
@@ -131,15 +201,8 @@ export class AmplifyExportedBackend
   }
   getNestedStacksByCategory(
     category: String,
-    categoryName: string
+    categoryName?: string
   ): IncludedNestedStack[] {
-    throw new Error("Method not implemented.");
-  }
-
-  generateExport(
-    frontEndType: FrontendType,
-    props: { objectKey: String }
-  ): void {
     throw new Error("Method not implemented.");
   }
 }
