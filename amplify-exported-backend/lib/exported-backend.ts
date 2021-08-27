@@ -4,22 +4,22 @@ import {
   IncludedNestedStack,
 } from "@aws-cdk/cloudformation-include";
 import * as cdk from "@aws-cdk/core";
-import * as fs from "fs-extra";
-import * as path from "path";
+import { Stack } from "@aws-cdk/core";
 import { AmplifyExportedBackendProps } from "./amplify-exported-backend-props";
 import { createAssetsAndUpdateParameters } from "./asset-manager";
 import { BaseAmplifyExportBackend } from "./base-exported-backend";
 import { Constants } from "./constants";
 import { APIGraphQLIncludedNestedStack, APIRestIncludedStack, AuthIncludedNestedStack, IAPIGraphQLIncludeNestedStack, IAPIRestIncludedStack, IAuthIncludeNestedStack } from "./include-nested-stacks";
 import { ILambdaFunctionIncludedNestedStack, LambdaFunctionIncludedNestedStack } from "./include-nested-stacks/lambda-function/lambda-function-nested-stack";
-import { CategoryStackMapping } from "./types/category-stack-mapping";
-import { ExportManifest } from "./types/export-manifest";
 const assert = require("assert");
 
 const {
   API_CATEGORY,
   AUTH_CATEGORY,
-  FUNCTION_CATEGORY
+  FUNCTION_CATEGORY,
+  AMPLIFY_EXPORT_MANIFEST_FILE,
+  AMPLIFY_CATEGORY_MAPPING_FILE,
+  AMPLIFY_EXPORT_TAG_FILE,
 } = Constants;
 
 /**
@@ -76,54 +76,56 @@ export interface IAmplifyExportedBackend {
   ): IncludedNestedStack[];
 }
 
+/***
+ * 
+ */
 export class AmplifyExportedBackend
   extends BaseAmplifyExportBackend
   implements IAmplifyExportedBackend
 {
+  rootStack: Stack;
   constructor(
     scope: cdk.Construct,
     id: string,
     props: AmplifyExportedBackendProps
   ) {
-    super(scope, id);
+    super(scope, id, props.path, props.stage);
 
-    const { categoryStackMappings, amplifyBackend, basePath } =
-      this.readExportedFileData(props);
 
-    this.categoryStackMappings = categoryStackMappings;
-    const stackProps = amplifyBackend.props;
+
+    const stackProps = this.exportBackendManifest.props;
     const deploymentBucketName = stackProps.parameters
       ? stackProps.parameters["DeploymentBucketName"]
       : undefined;
 
     assert(deploymentBucketName);
 
-    const stack = new cdk.Stack(scope, "AmplifyStack", {
+    const rootStack = new cdk.Stack(scope, "AmplifyStack", {
       ...props,
-      stackName: amplifyBackend.stackName,
+      stackName: this.exportBackendManifest.stackName,
     });
 
     const bucket = Bucket.fromBucketName(
-      stack,
+      rootStack,
       "deploymentBucket",
       deploymentBucketName
     );
-    const categoryStackMappingWithDepoyments = createAssetsAndUpdateParameters(
-      stack,
-      amplifyBackend.props,
-      categoryStackMappings,
-      basePath,
+    const categoryStackMappingWithDeployments = createAssetsAndUpdateParameters(
+      rootStack,
+      this.exportBackendManifest.props,
+      this.categoryStackMappings,
+      this.exportPath,
       bucket
     );
     const include = new CfnInclude(
-      stack,
-      "AmplifyInclude",
-      amplifyBackend.props
+      rootStack,
+      "AmplifyCfnInclude",
+      this.exportBackendManifest.props
     );
     this.cfnInclude = include;
 
     // add dependency to nested stack for each deployment
-    categoryStackMappingWithDepoyments.forEach((stackMapping) => {
+    categoryStackMappingWithDeployments.forEach((stackMapping) => {
       if (stackMapping.bucketDeployment) {
         const stack = include.getResource(
           stackMapping.category + stackMapping.resourceName
@@ -131,78 +133,14 @@ export class AmplifyExportedBackend
         stack.node.addDependency(stackMapping.bucketDeployment);
       }
     });
+
+    this.applyTags(rootStack, props.stage);
   }
 
-  private readExportedFileData(props: AmplifyExportedBackendProps) {
-    const basePath = path.resolve(props.path);
-    const manifestPath = path.join(
-      basePath,
-      Constants.AMPLIFY_EXPORT_MANIFEST_FILE
-    );
-    const categoryStackMappingFile = path.join(
-      basePath,
-      Constants.AMPLIFY_CATEGORY_MAPPING_FILE
-    );
-
-    if (!fs.existsSync(manifestPath)) {
-      throw new Error(
-        `${Constants.AMPLIFY_EXPORT_MANIFEST_FILE} file does not exist`
-      );
-    }
-
-    if (!fs.existsSync(categoryStackMappingFile)) {
-      throw new Error(
-        `${Constants.AMPLIFY_CATEGORY_MAPPING_FILE} file does not exist`
-      );
-    }
-    const amplifyBackend = JSON.parse(
-      fs.readFileSync(manifestPath, { encoding: "utf-8" })
-    ) as ExportManifest;
-
-    this.updatePropsToIncludeEnv(amplifyBackend, props.stage);
-    const categoryStackMappings = JSON.parse(
-      fs.readFileSync(categoryStackMappingFile, { encoding: "utf-8" })
-    ) as CategoryStackMapping[];
-    return { categoryStackMappings, amplifyBackend, basePath };
-  }
-
-  private updatePropsToIncludeEnv(
-    exportManifest: ExportManifest,
-    env: string = "dev"
-  ): ExportManifest {
-    const props = exportManifest.props;
-    const splitValues = exportManifest.stackName.split("-");
-    splitValues[2] = env;
-    exportManifest.stackName = splitValues.join("-");
-    if (!props.parameters) {
-      throw new Error("Root Stack Parameters cannot be null");
-    }
-    const parameterKeysToUpdate = [
-      "AuthRoleName",
-      "UnauthRoleName",
-      "DeploymentBucketName",
-    ];
-
-    for (const parameterKey of parameterKeysToUpdate) {
-      if (parameterKey in props.parameters) {
-        const val = props.parameters[parameterKey];
-        const values = val.split("-");
-        values[2] = env;
-        props.parameters[parameterKey] = values.join("-");
-      } else {
-        throw new Error(`${parameterKey} not present in Root Stack Parameters`);
-      }
-    }
-    const nestedStacks = props.loadNestedStacks;
-    if (nestedStacks) {
-      Object.keys(nestedStacks).forEach((nestedStackKey) => {
-        const nestedStack = nestedStacks[nestedStackKey];
-        if (nestedStack.parameters) {
-          nestedStack.parameters["env"] = env;
-        }
-      });
-    }
-    return exportManifest;
+  private applyTags(rootStack: cdk.Stack, env: string = 'dev') {
+    this.exportTags.forEach(tag => {
+      rootStack.tags.setTag(tag.Key, tag.Value.replace('{project-env}', env));
+    })
   }
 
   getAuthNestedStack(): IAuthIncludeNestedStack {

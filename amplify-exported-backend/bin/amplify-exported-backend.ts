@@ -9,6 +9,3 @@ const amplifyBackend = new AmplifyExportedBackend(app, "AmplifyBackend", {
   stage: 'dev',
   path: "./amplify-stuff",
 });
-
-amplifyBackend.getAuthNestedStack().getIdentityPool();
-amplifyBackend.getAPIGraphQLNestedStacks()

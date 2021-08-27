@@ -12,6 +12,7 @@ export const Constants = {
     },
   },
   AMPLIFY_EXPORT_MANIFEST_FILE: "amplify-export-manifest.json",
+  AMPLIFY_EXPORT_TAG_FILE: "export-tags.json",
   CATEGORIES: "categories",
   S3_BUCKET: "s3Bucket",
   AMPLIFY_CFN_TEMPLATES: "amplify-cfn-templates",
