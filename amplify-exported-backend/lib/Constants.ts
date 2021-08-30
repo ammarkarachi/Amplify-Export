@@ -11,6 +11,8 @@ export const Constants = {
       DEPLOYMENT_ROOT_KEY: "S3DeploymentRootKey",
     },
   },
+  PARAMETERS_DEPLOYMENT_BUCKET_NAME: 'DeploymentBucketName',
+  PARAMTERS_AUTH_VERIFICATION_BUCKET_NAME: 'verificationBucketName',
   AMPLIFY_EXPORT_MANIFEST_FILE: "amplify-export-manifest.json",
   AMPLIFY_EXPORT_TAG_FILE: "export-tags.json",
   CATEGORIES: "categories",

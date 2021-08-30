@@ -1,0 +1,1370 @@
+{
+    "stackName": "amplify-amplifyexportest-bruh-101952",
+    "props": {
+        "templateFile": "amplify-stuff/root-stack-template.json",
+        "parameters": {
+            "AuthRoleName": "amplify-amplifyexportest-bruh-101952-authRole",
+            "UnauthRoleName": "amplify-amplifyexportest-bruh-101952-unauthRole",
+            "DeploymentBucketName": "amplify-amplifyexportest-bruh-101952-deployment2"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {
+            "AuthTriggerCustomLambdaStack": {
+                "templateFile": "amplify-stuff/auth/auth-trigger-cloudformation-template.json",
+                "parameters": {
+                    "env": "bruh"
+                },
+                "preserveLogicalIds": true,
+                "loadNestedStacks": {}
+            },
+            "authamplifyexportest33df36b933df36b9": {
+                "templateFile": "amplify-stuff/auth/amplifyexportest33df36b933df36b9/amplifyexportest33df36b933df36b9-cloudformation-template.yml",
+                "parameters": {
+                    "identityPoolName": "amplifyexportest33df36b9_identitypool_33df36b9",
+                    "allowUnauthenticatedIdentities": false,
+                    "resourceNameTruncated": "amplif33df36b9",
+                    "userPoolName": "amplifyexportest33df36b9_userpool_33df36b9",
+                    "autoVerifiedAttributes": [
+                        "email"
+                    ],
+                    "mfaConfiguration": "OFF",
+                    "mfaTypes": [
+                        "SMS Text Message"
+                    ],
+                    "smsAuthenticationMessage": "Your authentication code is {####}",
+                    "smsVerificationMessage": "Your verification code is {####}",
+                    "emailVerificationSubject": "Your verification code",
+                    "emailVerificationMessage": "Your verification code is {####}",
+                    "defaultPasswordPolicy": false,
+                    "passwordPolicyMinLength": 8,
+                    "passwordPolicyCharacters": [],
+                    "requiredAttributes": [
+                        "email"
+                    ],
+                    "userpoolClientGenerateSecret": false,
+                    "userpoolClientRefreshTokenValidity": 30,
+                    "userpoolClientWriteAttributes": [
+                        "email"
+                    ],
+                    "userpoolClientReadAttributes": [
+                        "email"
+                    ],
+                    "userpoolClientLambdaRole": "amplif33df36b9_userpoolclient_lambda_role",
+                    "userpoolClientSetAttributes": false,
+                    "sharedId": "33df36b9",
+                    "resourceName": "amplifyexportest33df36b933df36b9",
+                    "authSelections": "identityPoolAndUserPool",
+                    "useDefault": "manual",
+                    "thirdPartyAuth": false,
+                    "userPoolGroups": false,
+                    "adminQueries": false,
+                    "triggers": "{\n  \"CreateAuthChallenge\": [\n    \"boilerplate-create-challenge\"\n  ],\n  \"DefineAuthChallenge\": [\n    \"boilerplate-define-challenge\"\n  ],\n  \"PostAuthentication\": [\n    \"custom\"\n  ],\n  \"CustomMessage\": [\n    \"verification-link\"\n  ],\n  \"VerifyAuthChallengeResponse\": [\n    \"boilerplate-verify\"\n  ]\n}",
+                    "hostedUI": false,
+                    "userPoolGroupList": [
+                        "asd"
+                    ],
+                    "serviceName": "Cognito",
+                    "usernameCaseSensitive": false,
+                    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"CreateAuthChallenge\",\n    \"lambdaFunctionName\": \"amplifyexportest33df36b933df36b9CreateAuthChallenge\"\n  },\n  {\n    \"triggerType\": \"DefineAuthChallenge\",\n    \"lambdaFunctionName\": \"amplifyexportest33df36b933df36b9DefineAuthChallenge\"\n  },\n  {\n    \"triggerType\": \"PostAuthentication\",\n    \"lambdaFunctionName\": \"amplifyexportest33df36b933df36b9PostAuthentication\"\n  },\n  {\n    \"triggerType\": \"CustomMessage\",\n    \"lambdaFunctionName\": \"amplifyexportest33df36b933df36b9CustomMessage\"\n  },\n  {\n    \"triggerType\": \"VerifyAuthChallengeResponse\",\n    \"lambdaFunctionName\": \"amplifyexportest33df36b933df36b9VerifyAuthChallengeResponse\"\n  }\n]",
+                    "breakCircularDependency": true,
+                    "permissions": [],
+                    "dependsOn": [
+                        {
+                            "category": "function",
+                            "resourceName": "amplifyexportest33df36b933df36b9CreateAuthChallenge",
+                            "triggerProvider": "Cognito",
+                            "attributes": [
+                                "Arn",
+                                "Name"
+                            ]
+                        },
+                        {
+                            "category": "function",
+                            "resourceName": "amplifyexportest33df36b933df36b9DefineAuthChallenge",
+                            "triggerProvider": "Cognito",
+                            "attributes": [
+                                "Arn",
+                                "Name"
+                            ]
+                        },
+                        {
+                            "category": "function",
+                            "resourceName": "amplifyexportest33df36b933df36b9PostAuthentication",
+                            "triggerProvider": "Cognito",
+                            "attributes": [
+                                "Arn",
+                                "Name"
+                            ]
+                        },
+                        {
+                            "category": "function",
+                            "resourceName": "amplifyexportest33df36b933df36b9CustomMessage",
+                            "triggerProvider": "Cognito",
+                            "attributes": [
+                                "Arn",
+                                "Name"
+                            ]
+                        },
+                        {
+                            "category": "function",
+                            "resourceName": "amplifyexportest33df36b933df36b9VerifyAuthChallengeResponse",
+                            "triggerProvider": "Cognito",
+                            "attributes": [
+                                "Arn",
+                                "Name"
+                            ]
+                        }
+                    ],
+                    "verificationBucketName": "amplifyexportest33df36b933df36b9verificationbucket",
+                    "authProviders": [],
+                    "env": "bruh"
+                },
+                "preserveLogicalIds": true,
+                "loadNestedStacks": {}
+            },
+            "authuserPoolGroups": {
+                "templateFile": "amplify-stuff/auth/userPoolGroups/template.json",
+                "parameters": {
+                    "env": "bruh"
+                },
+                "preserveLogicalIds": true,
+                "loadNestedStacks": {}
+            },
+            "functionamplifyexportest33df36b933df36b9CreateAuthChallenge": {
+                "templateFile": "amplify-stuff/function/amplifyexportest33df36b933df36b9CreateAuthChallenge/amplifyexportest33df36b933df36b9CreateAuthChallenge-cloudformation-template.json",
+                "parameters": {
+                    "modules": "boilerplate-create-challenge",
+                    "resourceName": "amplifyexportest33df36b933df36b9CreateAuthChallenge",
+                    "CHALLENGEANSWER": "hi",
+                    "env": "bruh",
+                    "deploymentBucketName": "amplify-amplifyexportest-bruh-101952-deployment2",
+                    "s3Key": "amplify-builds/amplifyexportest33df36b933df36b9CreateAuthChallenge-4d684838536234333256-build.zip"
+                },
+                "preserveLogicalIds": true,
+                "loadNestedStacks": {}
+            },
+            "functionamplifyexportest33df36b933df36b9CustomMessage": {
+                "templateFile": "amplify-stuff/function/amplifyexportest33df36b933df36b9CustomMessage/amplifyexportest33df36b933df36b9CustomMessage-cloudformation-template.json",
+                "parameters": {
+                    "modules": "verification-link",
+                    "resourceName": "amplifyexportest33df36b933df36b9CustomMessage",
+                    "REDIRECTURL": "http://localhost/",
+                    "EMAILSUBJECT": "hi",
+                    "EMAILMESSAGE": "yo",
+                    "env": "bruh",
+                    "deploymentBucketName": "amplify-amplifyexportest-bruh-101952-deployment2",
+                    "s3Key": "amplify-builds/amplifyexportest33df36b933df36b9CustomMessage-326a2b7341325a494e57-build.zip"
+                },
+                "preserveLogicalIds": true,
+                "loadNestedStacks": {}
+            },
+            "functionamplifyexportest33df36b933df36b9DefineAuthChallenge": {
+                "templateFile": "amplify-stuff/function/amplifyexportest33df36b933df36b9DefineAuthChallenge/amplifyexportest33df36b933df36b9DefineAuthChallenge-cloudformation-template.json",
+                "parameters": {
+                    "modules": "boilerplate-define-challenge",
+                    "resourceName": "amplifyexportest33df36b933df36b9DefineAuthChallenge",
+                    "env": "bruh",
+                    "deploymentBucketName": "amplify-amplifyexportest-bruh-101952-deployment2",
+                    "s3Key": "amplify-builds/amplifyexportest33df36b933df36b9DefineAuthChallenge-4965647963686a434950-build.zip"
+                },
+                "preserveLogicalIds": true,
+                "loadNestedStacks": {}
+            },
+            "functionamplifyexportest33df36b933df36b9PostAuthentication": {
+                "templateFile": "amplify-stuff/function/amplifyexportest33df36b933df36b9PostAuthentication/amplifyexportest33df36b933df36b9PostAuthentication-cloudformation-template.json",
+                "parameters": {
+                    "modules": "custom",
+                    "resourceName": "amplifyexportest33df36b933df36b9PostAuthentication",
+                    "env": "bruh",
+                    "deploymentBucketName": "amplify-amplifyexportest-bruh-101952-deployment2",
+                    "s3Key": "amplify-builds/amplifyexportest33df36b933df36b9PostAuthentication-586a44356e7878754335-build.zip"
+                },
+                "preserveLogicalIds": true,
+                "loadNestedStacks": {}
+            },
+            "functionamplifyexportest33df36b933df36b9VerifyAuthChallengeResponse": {
+                "templateFile": "amplify-stuff/function/amplifyexportest33df36b933df36b9VerifyAuthChallengeResponse/amplifyexportest33df36b933df36b9VerifyAuthChallengeResponse-cloudformation-template.json",
+                "parameters": {
+                    "modules": "boilerplate-verify",
+                    "resourceName": "amplifyexportest33df36b933df36b9VerifyAuthChallengeResponse",
+                    "env": "bruh",
+                    "deploymentBucketName": "amplify-amplifyexportest-bruh-101952-deployment2",
+                    "s3Key": "amplify-builds/amplifyexportest33df36b933df36b9VerifyAuthChallengeResponse-6f4e316138326d51324b-build.zip"
+                },
+                "preserveLogicalIds": true,
+                "loadNestedStacks": {}
+            }
+        }
+    }
+}
+functionamplifyexportest33df36b933df36b9CreateAuthChallenge
+functionamplifyexportest33df36b933df36b9DefineAuthChallenge
+functionamplifyexportest33df36b933df36b9PostAuthentication
+functionamplifyexportest33df36b933df36b9CustomMessage
+functionamplifyexportest33df36b933df36b9VerifyAuthChallengeResponse
+Description: Root Stack for AWS Amplify CLI
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  amplifyexportest33df36b933df36b9CreateAuthChallengedeploymentAwsCliLayer05E5B230:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      Content:
+        S3Bucket:
+          Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3BucketAEADE8C7
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+      Description: /opt/awscli/aws
+    Metadata:
+      aws:cdk:path: AmplifyStack/amplifyexportest33df36b933df36b9CreateAuthChallenge-deployment/AwsCliLayer/Resource
+      aws:asset:path: asset.e9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68.zip
+      aws:asset:property: Content
+  amplifyexportest33df36b933df36b9CreateAuthChallengedeploymentCustomResource23BF671E:
+    Type: Custom::CDKBucketDeployment
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
+          - Arn
+      SourceBucketNames:
+        - Ref: AssetParameters9ed34466a7780b2e98d901077faf92b6f2dee753708aab29bc3975576551d7d2S3Bucket33B7343A
+      SourceObjectKeys:
+        - Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters9ed34466a7780b2e98d901077faf92b6f2dee753708aab29bc3975576551d7d2S3VersionKey30C20789
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters9ed34466a7780b2e98d901077faf92b6f2dee753708aab29bc3975576551d7d2S3VersionKey30C20789
+      DestinationBucketName: amplify-amplifyexportest-bruh-101952-deployment2
+      DestinationBucketKeyPrefix: amplify-builds
+      Prune: false
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: AmplifyStack/amplifyexportest33df36b933df36b9CreateAuthChallenge-deployment/CustomResource/Default
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: AmplifyStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParameters9ed34466a7780b2e98d901077faf92b6f2dee753708aab29bc3975576551d7d2S3Bucket33B7343A
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParameters9ed34466a7780b2e98d901077faf92b6f2dee753708aab29bc3975576551d7d2S3Bucket33B7343A
+                    - /*
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - :s3:::amplify-amplifyexportest-bruh-101952-deployment2
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - :s3:::amplify-amplifyexportest-bruh-101952-deployment2/*
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParameterscacc54008070b334de1454ba3cc0953e224a5f57693b92ae62d574046f71e4b6S3Bucket90B80FBB
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParameterscacc54008070b334de1454ba3cc0953e224a5f57693b92ae62d574046f71e4b6S3Bucket90B80FBB
+                    - /*
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParametersd0b9eb09787d5d97862711999c7ff8fca0b609190cd47cd97b9221f2db49e4d0S3Bucket8B9C3D66
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParametersd0b9eb09787d5d97862711999c7ff8fca0b609190cd47cd97b9221f2db49e4d0S3Bucket8B9C3D66
+                    - /*
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParameters230a83844f74c2677f41404e699137d642fb0dcb7388bea9ba096de7ee47a9a8S3BucketCC808DB1
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParameters230a83844f74c2677f41404e699137d642fb0dcb7388bea9ba096de7ee47a9a8S3BucketCC808DB1
+                    - /*
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParameters89540199e3551703ea4ff68da6aed44ab4340093f16059cba2b0189e0e24ffffS3Bucket836F203C
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParameters89540199e3551703ea4ff68da6aed44ab4340093f16059cba2b0189e0e24ffffS3Bucket836F203C
+                    - /*
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParametersa9d09885d608ce7356638bfc68edb313949d129f806857bb03e6dcdf3dfa2c2cS3Bucket56A5D493
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Ref: AssetParametersa9d09885d608ce7356638bfc68edb313949d129f806857bb03e6dcdf3dfa2c2cS3Bucket56A5D493
+                    - /*
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - :s3:::amplifyexportest33df36b933df36b9verificationbucket-bruh
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - :s3:::amplifyexportest33df36b933df36b9verificationbucket-bruh/*
+        Version: "2012-10-17"
+      PolicyName: CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF
+      Roles:
+        - Ref: CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+    Metadata:
+      aws:cdk:path: AmplifyStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersc24b999656e4fe6c609c31bae56a1cf4717a405619c3aa6ba1bc686b8c2c86cfS3Bucket55EFA30C
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersc24b999656e4fe6c609c31bae56a1cf4717a405619c3aa6ba1bc686b8c2c86cfS3VersionKey60329B70
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersc24b999656e4fe6c609c31bae56a1cf4717a405619c3aa6ba1bc686b8c2c86cfS3VersionKey60329B70
+      Role:
+        Fn::GetAtt:
+          - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+          - Arn
+      Handler: index.handler
+      Layers:
+        - Ref: amplifyexportest33df36b933df36b9CreateAuthChallengedeploymentAwsCliLayer05E5B230
+      Runtime: python3.6
+      Timeout: 900
+    DependsOn:
+      - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF
+      - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+    Metadata:
+      aws:cdk:path: AmplifyStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource
+      aws:asset:path: asset.c24b999656e4fe6c609c31bae56a1cf4717a405619c3aa6ba1bc686b8c2c86cf
+      aws:asset:property: Code
+  amplifyexportest33df36b933df36b9DefineAuthChallengedeploymentAwsCliLayer6F6CBF1F:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      Content:
+        S3Bucket:
+          Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3BucketAEADE8C7
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+      Description: /opt/awscli/aws
+    Metadata:
+      aws:cdk:path: AmplifyStack/amplifyexportest33df36b933df36b9DefineAuthChallenge-deployment/AwsCliLayer/Resource
+      aws:asset:path: asset.e9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68.zip
+      aws:asset:property: Content
+  amplifyexportest33df36b933df36b9DefineAuthChallengedeploymentCustomResourceE35D47DA:
+    Type: Custom::CDKBucketDeployment
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
+          - Arn
+      SourceBucketNames:
+        - Ref: AssetParameterscacc54008070b334de1454ba3cc0953e224a5f57693b92ae62d574046f71e4b6S3Bucket90B80FBB
+      SourceObjectKeys:
+        - Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterscacc54008070b334de1454ba3cc0953e224a5f57693b92ae62d574046f71e4b6S3VersionKey25DFFDAE
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterscacc54008070b334de1454ba3cc0953e224a5f57693b92ae62d574046f71e4b6S3VersionKey25DFFDAE
+      DestinationBucketName: amplify-amplifyexportest-bruh-101952-deployment2
+      DestinationBucketKeyPrefix: amplify-builds
+      Prune: false
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: AmplifyStack/amplifyexportest33df36b933df36b9DefineAuthChallenge-deployment/CustomResource/Default
+  amplifyexportest33df36b933df36b9PostAuthenticationdeploymentAwsCliLayerB4F3E451:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      Content:
+        S3Bucket:
+          Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3BucketAEADE8C7
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+      Description: /opt/awscli/aws
+    Metadata:
+      aws:cdk:path: AmplifyStack/amplifyexportest33df36b933df36b9PostAuthentication-deployment/AwsCliLayer/Resource
+      aws:asset:path: asset.e9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68.zip
+      aws:asset:property: Content
+  amplifyexportest33df36b933df36b9PostAuthenticationdeploymentCustomResource0CD2CA0C:
+    Type: Custom::CDKBucketDeployment
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
+          - Arn
+      SourceBucketNames:
+        - Ref: AssetParametersd0b9eb09787d5d97862711999c7ff8fca0b609190cd47cd97b9221f2db49e4d0S3Bucket8B9C3D66
+      SourceObjectKeys:
+        - Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersd0b9eb09787d5d97862711999c7ff8fca0b609190cd47cd97b9221f2db49e4d0S3VersionKeyEECBA0D0
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersd0b9eb09787d5d97862711999c7ff8fca0b609190cd47cd97b9221f2db49e4d0S3VersionKeyEECBA0D0
+      DestinationBucketName: amplify-amplifyexportest-bruh-101952-deployment2
+      DestinationBucketKeyPrefix: amplify-builds
+      Prune: false
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: AmplifyStack/amplifyexportest33df36b933df36b9PostAuthentication-deployment/CustomResource/Default
+  amplifyexportest33df36b933df36b9CustomMessagedeploymentAwsCliLayerDC3BAEE9:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      Content:
+        S3Bucket:
+          Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3BucketAEADE8C7
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+      Description: /opt/awscli/aws
+    Metadata:
+      aws:cdk:path: AmplifyStack/amplifyexportest33df36b933df36b9CustomMessage-deployment/AwsCliLayer/Resource
+      aws:asset:path: asset.e9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68.zip
+      aws:asset:property: Content
+  amplifyexportest33df36b933df36b9CustomMessagedeploymentCustomResource42901C1E:
+    Type: Custom::CDKBucketDeployment
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
+          - Arn
+      SourceBucketNames:
+        - Ref: AssetParameters230a83844f74c2677f41404e699137d642fb0dcb7388bea9ba096de7ee47a9a8S3BucketCC808DB1
+      SourceObjectKeys:
+        - Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters230a83844f74c2677f41404e699137d642fb0dcb7388bea9ba096de7ee47a9a8S3VersionKey000B6626
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters230a83844f74c2677f41404e699137d642fb0dcb7388bea9ba096de7ee47a9a8S3VersionKey000B6626
+      DestinationBucketName: amplify-amplifyexportest-bruh-101952-deployment2
+      DestinationBucketKeyPrefix: amplify-builds
+      Prune: false
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: AmplifyStack/amplifyexportest33df36b933df36b9CustomMessage-deployment/CustomResource/Default
+  amplifyexportest33df36b933df36b9VerifyAuthChallengeResponsedeploymentAwsCliLayer4100E564:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      Content:
+        S3Bucket:
+          Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3BucketAEADE8C7
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+      Description: /opt/awscli/aws
+    Metadata:
+      aws:cdk:path: AmplifyStack/amplifyexportest33df36b933df36b9VerifyAuthChallengeResponse-deployment/AwsCliLayer/Resource
+      aws:asset:path: asset.e9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68.zip
+      aws:asset:property: Content
+  amplifyexportest33df36b933df36b9VerifyAuthChallengeResponsedeploymentCustomResource8CA50D6C:
+    Type: Custom::CDKBucketDeployment
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
+          - Arn
+      SourceBucketNames:
+        - Ref: AssetParameters89540199e3551703ea4ff68da6aed44ab4340093f16059cba2b0189e0e24ffffS3Bucket836F203C
+      SourceObjectKeys:
+        - Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters89540199e3551703ea4ff68da6aed44ab4340093f16059cba2b0189e0e24ffffS3VersionKey392D1094
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters89540199e3551703ea4ff68da6aed44ab4340093f16059cba2b0189e0e24ffffS3VersionKey392D1094
+      DestinationBucketName: amplify-amplifyexportest-bruh-101952-deployment2
+      DestinationBucketKeyPrefix: amplify-builds
+      Prune: false
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: AmplifyStack/amplifyexportest33df36b933df36b9VerifyAuthChallengeResponse-deployment/CustomResource/Default
+  authassetdeploymentbucketAwsCliLayer9F99488F:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      Content:
+        S3Bucket:
+          Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3BucketAEADE8C7
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F
+      Description: /opt/awscli/aws
+    Metadata:
+      aws:cdk:path: AmplifyStack/auth-asset-deployment-bucket/AwsCliLayer/Resource
+      aws:asset:path: asset.e9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68.zip
+      aws:asset:property: Content
+  authassetdeploymentbucketCustomResourceC500F381:
+    Type: Custom::CDKBucketDeployment
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
+          - Arn
+      SourceBucketNames:
+        - Ref: AssetParametersa9d09885d608ce7356638bfc68edb313949d129f806857bb03e6dcdf3dfa2c2cS3Bucket56A5D493
+      SourceObjectKeys:
+        - Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa9d09885d608ce7356638bfc68edb313949d129f806857bb03e6dcdf3dfa2c2cS3VersionKey1716EE9E
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersa9d09885d608ce7356638bfc68edb313949d129f806857bb03e6dcdf3dfa2c2cS3VersionKey1716EE9E
+      DestinationBucketName: amplifyexportest33df36b933df36b9verificationbucket-bruh
+      Prune: true
+      SystemMetadata:
+        acl: public-read
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: AmplifyStack/auth-asset-deployment-bucket/CustomResource/Default
+  DeploymentBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: amplify-amplifyexportest-bruh-101952-deployment2
+    DeletionPolicy: Retain
+  AuthRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ""
+            Effect: Deny
+            Principal:
+              Federated: cognito-identity.amazonaws.com
+            Action: sts:AssumeRoleWithWebIdentity
+      RoleName: amplify-amplifyexportest-bruh-101952-authRole
+  UnauthRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ""
+            Effect: Deny
+            Principal:
+              Federated: cognito-identity.amazonaws.com
+            Action: sts:AssumeRoleWithWebIdentity
+      RoleName: amplify-amplifyexportest-bruh-101952-unauthRole
+  authamplifyexportest33df36b933df36b9:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.
+            - Ref: AWS::Region
+            - "."
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParametersbbe5ce91915ba559699d55fdedb8f577e390bd248b618491c392163b1e0766f9S3Bucket77FED3FE
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersbbe5ce91915ba559699d55fdedb8f577e390bd248b618491c392163b1e0766f9S3VersionKey10E070C2
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersbbe5ce91915ba559699d55fdedb8f577e390bd248b618491c392163b1e0766f9S3VersionKey10E070C2
+      Parameters:
+        authRoleArn:
+          Fn::GetAtt:
+            - AuthRole
+            - Arn
+        unauthRoleArn:
+          Fn::GetAtt:
+            - UnauthRole
+            - Arn
+        parentStack:
+          Ref: AWS::StackId
+  functionamplifyexportest33df36b933df36b9CreateAuthChallenge:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.
+            - Ref: AWS::Region
+            - "."
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParametersbb9588fb39e9a9b342547ad6d0987ea4a0bbb9a6af2a9d7d62acce975adf7951S3BucketA5C9E24F
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersbb9588fb39e9a9b342547ad6d0987ea4a0bbb9a6af2a9d7d62acce975adf7951S3VersionKey794EBCB0
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersbb9588fb39e9a9b342547ad6d0987ea4a0bbb9a6af2a9d7d62acce975adf7951S3VersionKey794EBCB0
+    DependsOn:
+      - amplifyexportest33df36b933df36b9CreateAuthChallengedeploymentAwsCliLayer05E5B230
+      - amplifyexportest33df36b933df36b9CreateAuthChallengedeploymentCustomResource23BF671E
+  functionamplifyexportest33df36b933df36b9DefineAuthChallenge:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.
+            - Ref: AWS::Region
+            - "."
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameterse43c6662e594dbf68f0a676d84270161f7359abb669b6025f0bf2a0c063ed5fdS3BucketB049C15C
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameterse43c6662e594dbf68f0a676d84270161f7359abb669b6025f0bf2a0c063ed5fdS3VersionKey27A2AA32
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameterse43c6662e594dbf68f0a676d84270161f7359abb669b6025f0bf2a0c063ed5fdS3VersionKey27A2AA32
+    DependsOn:
+      - amplifyexportest33df36b933df36b9DefineAuthChallengedeploymentAwsCliLayer6F6CBF1F
+      - amplifyexportest33df36b933df36b9DefineAuthChallengedeploymentCustomResourceE35D47DA
+  functionamplifyexportest33df36b933df36b9PostAuthentication:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.
+            - Ref: AWS::Region
+            - "."
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParametersa95de47d471ae8e55cb2e13e153f7668fa0fc6c788a830b92ece3c9a47699cc6S3Bucket1B9EC1FC
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersa95de47d471ae8e55cb2e13e153f7668fa0fc6c788a830b92ece3c9a47699cc6S3VersionKey3007C1D2
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersa95de47d471ae8e55cb2e13e153f7668fa0fc6c788a830b92ece3c9a47699cc6S3VersionKey3007C1D2
+    DependsOn:
+      - amplifyexportest33df36b933df36b9PostAuthenticationdeploymentAwsCliLayerB4F3E451
+      - amplifyexportest33df36b933df36b9PostAuthenticationdeploymentCustomResource0CD2CA0C
+  functionamplifyexportest33df36b933df36b9CustomMessage:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.
+            - Ref: AWS::Region
+            - "."
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameters42fd53a539fd1615abc59c6f8985f96555b9204bab97a7ee315fb2051c3140c7S3Bucket0DDA773A
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters42fd53a539fd1615abc59c6f8985f96555b9204bab97a7ee315fb2051c3140c7S3VersionKey7A45F6B9
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters42fd53a539fd1615abc59c6f8985f96555b9204bab97a7ee315fb2051c3140c7S3VersionKey7A45F6B9
+    DependsOn:
+      - amplifyexportest33df36b933df36b9CustomMessagedeploymentAwsCliLayerDC3BAEE9
+      - amplifyexportest33df36b933df36b9CustomMessagedeploymentCustomResource42901C1E
+  functionamplifyexportest33df36b933df36b9VerifyAuthChallengeResponse:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.
+            - Ref: AWS::Region
+            - "."
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameterse4889c5743ff0ae363c85756cf624962299b28377ecd991aff3f2697252ebe19S3BucketEA7FE36F
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameterse4889c5743ff0ae363c85756cf624962299b28377ecd991aff3f2697252ebe19S3VersionKey56D4FDFB
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameterse4889c5743ff0ae363c85756cf624962299b28377ecd991aff3f2697252ebe19S3VersionKey56D4FDFB
+    DependsOn:
+      - amplifyexportest33df36b933df36b9VerifyAuthChallengeResponsedeploymentAwsCliLayer4100E564
+      - amplifyexportest33df36b933df36b9VerifyAuthChallengeResponsedeploymentCustomResource8CA50D6C
+  AuthTriggerCustomLambdaStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.
+            - Ref: AWS::Region
+            - "."
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParametersda5d919703b1d55b4a7e3e7ce423f89c4af8d5cbc1eb21ee58608f6a57b6cdb6S3Bucket1D837973
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersda5d919703b1d55b4a7e3e7ce423f89c4af8d5cbc1eb21ee58608f6a57b6cdb6S3VersionKey9EBD3F93
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersda5d919703b1d55b4a7e3e7ce423f89c4af8d5cbc1eb21ee58608f6a57b6cdb6S3VersionKey9EBD3F93
+      Parameters:
+        userpoolId:
+          Fn::GetAtt:
+            - authamplifyexportest33df36b933df36b9
+            - Outputs.UserPoolId
+        userpoolArn:
+          Fn::GetAtt:
+            - authamplifyexportest33df36b933df36b9
+            - Outputs.UserPoolArn
+        functionamplifyexportest33df36b933df36b9CreateAuthChallengeArn:
+          Fn::GetAtt:
+            - functionamplifyexportest33df36b933df36b9CreateAuthChallenge
+            - Outputs.Arn
+        functionamplifyexportest33df36b933df36b9CreateAuthChallengeName:
+          Fn::GetAtt:
+            - functionamplifyexportest33df36b933df36b9CreateAuthChallenge
+            - Outputs.Name
+        functionamplifyexportest33df36b933df36b9DefineAuthChallengeArn:
+          Fn::GetAtt:
+            - functionamplifyexportest33df36b933df36b9DefineAuthChallenge
+            - Outputs.Arn
+        functionamplifyexportest33df36b933df36b9DefineAuthChallengeName:
+          Fn::GetAtt:
+            - functionamplifyexportest33df36b933df36b9DefineAuthChallenge
+            - Outputs.Name
+        functionamplifyexportest33df36b933df36b9PostAuthenticationArn:
+          Fn::GetAtt:
+            - functionamplifyexportest33df36b933df36b9PostAuthentication
+            - Outputs.Arn
+        functionamplifyexportest33df36b933df36b9PostAuthenticationName:
+          Fn::GetAtt:
+            - functionamplifyexportest33df36b933df36b9PostAuthentication
+            - Outputs.Name
+        functionamplifyexportest33df36b933df36b9CustomMessageArn:
+          Fn::GetAtt:
+            - functionamplifyexportest33df36b933df36b9CustomMessage
+            - Outputs.Arn
+        functionamplifyexportest33df36b933df36b9CustomMessageName:
+          Fn::GetAtt:
+            - functionamplifyexportest33df36b933df36b9CustomMessage
+            - Outputs.Name
+        functionamplifyexportest33df36b933df36b9VerifyAuthChallengeResponseArn:
+          Fn::GetAtt:
+            - functionamplifyexportest33df36b933df36b9VerifyAuthChallengeResponse
+            - Outputs.Arn
+        functionamplifyexportest33df36b933df36b9VerifyAuthChallengeResponseName:
+          Fn::GetAtt:
+            - functionamplifyexportest33df36b933df36b9VerifyAuthChallengeResponse
+            - Outputs.Name
+    DependsOn:
+      - authamplifyexportest33df36b933df36b9
+      - functionamplifyexportest33df36b933df36b9CreateAuthChallenge
+      - functionamplifyexportest33df36b933df36b9CustomMessage
+      - functionamplifyexportest33df36b933df36b9DefineAuthChallenge
+      - functionamplifyexportest33df36b933df36b9PostAuthentication
+      - functionamplifyexportest33df36b933df36b9VerifyAuthChallengeResponse
+  authuserPoolGroups:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.
+            - Ref: AWS::Region
+            - "."
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameters2709f056df3806032cbdacdaaf84f188791556024f6ab1c62200ce027ae909d9S3BucketD9AED926
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters2709f056df3806032cbdacdaaf84f188791556024f6ab1c62200ce027ae909d9S3VersionKeyCADEB991
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters2709f056df3806032cbdacdaaf84f188791556024f6ab1c62200ce027ae909d9S3VersionKeyCADEB991
+      Parameters:
+        AuthRoleArn:
+          Fn::GetAtt:
+            - AuthRole
+            - Arn
+        UnauthRoleArn:
+          Fn::GetAtt:
+            - UnauthRole
+            - Arn
+        authamplifyexportest33df36b933df36b9UserPoolId:
+          Fn::GetAtt:
+            - authamplifyexportest33df36b933df36b9
+            - Outputs.UserPoolId
+        authamplifyexportest33df36b933df36b9AppClientIDWeb:
+          Fn::GetAtt:
+            - authamplifyexportest33df36b933df36b9
+            - Outputs.AppClientIDWeb
+        authamplifyexportest33df36b933df36b9AppClientID:
+          Fn::GetAtt:
+            - authamplifyexportest33df36b933df36b9
+            - Outputs.AppClientID
+        authamplifyexportest33df36b933df36b9IdentityPoolId:
+          Fn::GetAtt:
+            - authamplifyexportest33df36b933df36b9
+            - Outputs.IdentityPoolId
+  UpdateRolesWithIDPFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action: iam:UpdateAssumeRolePolicy
+                Resource:
+                  Fn::GetAtt:
+                    - AuthRole
+                    - Arn
+              - Effect: Allow
+                Action: iam:UpdateAssumeRolePolicy
+                Resource:
+                  Fn::GetAtt:
+                    - UnauthRole
+                    - Arn
+          PolicyName: UpdateRolesWithIDPFunctionPolicy
+      RoleName:
+        Fn::Join:
+          - ""
+          - - amplify-amplifyexportest-bruh-101952-authRole
+            - -idp
+  UpdateRolesWithIDPFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile:
+          Fn::Join:
+            - "\n"
+            - - const response = require('cfn-response');
+              - const aws = require('aws-sdk');
+              - let responseData = {};
+              - exports.handler = function(event, context) {
+              - "  try {"
+              - "    let authRoleName = event.ResourceProperties.authRoleName;"
+              - "    let unauthRoleName = event.ResourceProperties.unauthRoleName;"
+              - "    let idpId = event.ResourceProperties.idpId;"
+              - "    let promises = [];"
+              - "    let authParamsJson = { 'Version': '2012-10-17','Statement': [{'Effect': 'Allow','Principal': {'Federated': 'cognito-identity.amazonaws.com'},'Action': 'sts:AssumeRoleWithWebIdentity','Condition': {'StringEquals': {'cognito-identity.amazonaws.com:aud': idpId},'ForAnyValue:StringLike': {'cognito-identity.amazonaws.com:amr': 'authenticated'}}}]};"
+              - "    let unauthParamsJson = { 'Version': '2012-10-17','Statement': [{'Effect': 'Allow','Principal': {'Federated': 'cognito-identity.amazonaws.com'},'Action': 'sts:AssumeRoleWithWebIdentity','Condition': {'StringEquals': {'cognito-identity.amazonaws.com:aud': idpId},'ForAnyValue:StringLike': {'cognito-identity.amazonaws.com:amr': 'unauthenticated'}}}]};"
+              - "    if (event.RequestType == 'Delete') {"
+              - "        delete authParamsJson.Statement[0].Condition;"
+              - "        delete unauthParamsJson.Statement[0].Condition;"
+              - "        let authParams = { PolicyDocument: JSON.stringify(authParamsJson),RoleName: authRoleName};"
+              - "        let unauthParams = {PolicyDocument: JSON.stringify(unauthParamsJson),RoleName: unauthRoleName};"
+              - "        const iam = new aws.IAM({ apiVersion: '2010-05-08', region: event.ResourceProperties.region});"
+              - "        promises.push(iam.updateAssumeRolePolicy(authParams).promise());"
+              - "        promises.push(iam.updateAssumeRolePolicy(unauthParams).promise());"
+              - "        Promise.all(promises)"
+              - "         .then((res) => {"
+              - '            console.log("delete response data" + JSON.stringify(res));'
+              - "            response.send(event, context, response.SUCCESS, {});"
+              - "         });"
+              - "    }"
+              - "    if (event.RequestType == 'Update' || event.RequestType == 'Create') {"
+              - "       const iam = new aws.IAM({ apiVersion: '2010-05-08', region: event.ResourceProperties.region});"
+              - "        let authParams = { PolicyDocument: JSON.stringify(authParamsJson),RoleName: authRoleName};"
+              - "        let unauthParams = {PolicyDocument: JSON.stringify(unauthParamsJson),RoleName: unauthRoleName};"
+              - "        promises.push(iam.updateAssumeRolePolicy(authParams).promise());"
+              - "        promises.push(iam.updateAssumeRolePolicy(unauthParams).promise());"
+              - "        Promise.all(promises)"
+              - "         .then((res) => {"
+              - '            console.log("createORupdate" + res);'
+              - '            console.log("response data" + JSON.stringify(res));'
+              - "            response.send(event, context, response.SUCCESS, {});"
+              - "         });"
+              - "    }"
+              - "  } catch(err) {"
+              - "       console.log(err.stack);"
+              - "       responseData = {Error: err};"
+              - "       response.send(event, context, response.FAILED, responseData);"
+              - "       throw err;"
+              - "  }"
+              - "};"
+      Role:
+        Fn::GetAtt:
+          - UpdateRolesWithIDPFunctionRole
+          - Arn
+      Handler: index.handler
+      Runtime: nodejs12.x
+      Timeout: 300
+    DependsOn:
+      - authamplifyexportest33df36b933df36b9
+      - AuthRole
+      - UnauthRole
+  UpdateRolesWithIDPFunctionOutputs:
+    Type: Custom::LambdaCallout
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - UpdateRolesWithIDPFunction
+          - Arn
+      region:
+        Ref: AWS::Region
+      idpId:
+        Fn::GetAtt:
+          - authamplifyexportest33df36b933df36b9
+          - Outputs.IdentityPoolId
+      authRoleName: amplify-amplifyexportest-bruh-101952-authRole
+      unauthRoleName: amplify-amplifyexportest-bruh-101952-unauthRole
+Parameters:
+  AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3BucketAEADE8C7:
+    Type: String
+    Description: S3 bucket for asset "e9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68"
+  AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68S3VersionKeyE415415F:
+    Type: String
+    Description: S3 key for asset version "e9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68"
+  AssetParameterse9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68ArtifactHashD9A515C3:
+    Type: String
+    Description: Artifact hash for asset "e9882ab123687399f934da0d45effe675ecc8ce13b40cb946f3e1d6141fe8d68"
+  AssetParametersc24b999656e4fe6c609c31bae56a1cf4717a405619c3aa6ba1bc686b8c2c86cfS3Bucket55EFA30C:
+    Type: String
+    Description: S3 bucket for asset "c24b999656e4fe6c609c31bae56a1cf4717a405619c3aa6ba1bc686b8c2c86cf"
+  AssetParametersc24b999656e4fe6c609c31bae56a1cf4717a405619c3aa6ba1bc686b8c2c86cfS3VersionKey60329B70:
+    Type: String
+    Description: S3 key for asset version "c24b999656e4fe6c609c31bae56a1cf4717a405619c3aa6ba1bc686b8c2c86cf"
+  AssetParametersc24b999656e4fe6c609c31bae56a1cf4717a405619c3aa6ba1bc686b8c2c86cfArtifactHash85F58E48:
+    Type: String
+    Description: Artifact hash for asset "c24b999656e4fe6c609c31bae56a1cf4717a405619c3aa6ba1bc686b8c2c86cf"
+  AssetParameters9ed34466a7780b2e98d901077faf92b6f2dee753708aab29bc3975576551d7d2S3Bucket33B7343A:
+    Type: String
+    Description: S3 bucket for asset "9ed34466a7780b2e98d901077faf92b6f2dee753708aab29bc3975576551d7d2"
+  AssetParameters9ed34466a7780b2e98d901077faf92b6f2dee753708aab29bc3975576551d7d2S3VersionKey30C20789:
+    Type: String
+    Description: S3 key for asset version "9ed34466a7780b2e98d901077faf92b6f2dee753708aab29bc3975576551d7d2"
+  AssetParameters9ed34466a7780b2e98d901077faf92b6f2dee753708aab29bc3975576551d7d2ArtifactHash548EEB29:
+    Type: String
+    Description: Artifact hash for asset "9ed34466a7780b2e98d901077faf92b6f2dee753708aab29bc3975576551d7d2"
+  AssetParameterscacc54008070b334de1454ba3cc0953e224a5f57693b92ae62d574046f71e4b6S3Bucket90B80FBB:
+    Type: String
+    Description: S3 bucket for asset "cacc54008070b334de1454ba3cc0953e224a5f57693b92ae62d574046f71e4b6"
+  AssetParameterscacc54008070b334de1454ba3cc0953e224a5f57693b92ae62d574046f71e4b6S3VersionKey25DFFDAE:
+    Type: String
+    Description: S3 key for asset version "cacc54008070b334de1454ba3cc0953e224a5f57693b92ae62d574046f71e4b6"
+  AssetParameterscacc54008070b334de1454ba3cc0953e224a5f57693b92ae62d574046f71e4b6ArtifactHashC1F59D12:
+    Type: String
+    Description: Artifact hash for asset "cacc54008070b334de1454ba3cc0953e224a5f57693b92ae62d574046f71e4b6"
+  AssetParametersd0b9eb09787d5d97862711999c7ff8fca0b609190cd47cd97b9221f2db49e4d0S3Bucket8B9C3D66:
+    Type: String
+    Description: S3 bucket for asset "d0b9eb09787d5d97862711999c7ff8fca0b609190cd47cd97b9221f2db49e4d0"
+  AssetParametersd0b9eb09787d5d97862711999c7ff8fca0b609190cd47cd97b9221f2db49e4d0S3VersionKeyEECBA0D0:
+    Type: String
+    Description: S3 key for asset version "d0b9eb09787d5d97862711999c7ff8fca0b609190cd47cd97b9221f2db49e4d0"
+  AssetParametersd0b9eb09787d5d97862711999c7ff8fca0b609190cd47cd97b9221f2db49e4d0ArtifactHashA1FF1438:
+    Type: String
+    Description: Artifact hash for asset "d0b9eb09787d5d97862711999c7ff8fca0b609190cd47cd97b9221f2db49e4d0"
+  AssetParameters230a83844f74c2677f41404e699137d642fb0dcb7388bea9ba096de7ee47a9a8S3BucketCC808DB1:
+    Type: String
+    Description: S3 bucket for asset "230a83844f74c2677f41404e699137d642fb0dcb7388bea9ba096de7ee47a9a8"
+  AssetParameters230a83844f74c2677f41404e699137d642fb0dcb7388bea9ba096de7ee47a9a8S3VersionKey000B6626:
+    Type: String
+    Description: S3 key for asset version "230a83844f74c2677f41404e699137d642fb0dcb7388bea9ba096de7ee47a9a8"
+  AssetParameters230a83844f74c2677f41404e699137d642fb0dcb7388bea9ba096de7ee47a9a8ArtifactHash3E376EC4:
+    Type: String
+    Description: Artifact hash for asset "230a83844f74c2677f41404e699137d642fb0dcb7388bea9ba096de7ee47a9a8"
+  AssetParameters89540199e3551703ea4ff68da6aed44ab4340093f16059cba2b0189e0e24ffffS3Bucket836F203C:
+    Type: String
+    Description: S3 bucket for asset "89540199e3551703ea4ff68da6aed44ab4340093f16059cba2b0189e0e24ffff"
+  AssetParameters89540199e3551703ea4ff68da6aed44ab4340093f16059cba2b0189e0e24ffffS3VersionKey392D1094:
+    Type: String
+    Description: S3 key for asset version "89540199e3551703ea4ff68da6aed44ab4340093f16059cba2b0189e0e24ffff"
+  AssetParameters89540199e3551703ea4ff68da6aed44ab4340093f16059cba2b0189e0e24ffffArtifactHash1BC12DC5:
+    Type: String
+    Description: Artifact hash for asset "89540199e3551703ea4ff68da6aed44ab4340093f16059cba2b0189e0e24ffff"
+  AssetParametersa9d09885d608ce7356638bfc68edb313949d129f806857bb03e6dcdf3dfa2c2cS3Bucket56A5D493:
+    Type: String
+    Description: S3 bucket for asset "a9d09885d608ce7356638bfc68edb313949d129f806857bb03e6dcdf3dfa2c2c"
+  AssetParametersa9d09885d608ce7356638bfc68edb313949d129f806857bb03e6dcdf3dfa2c2cS3VersionKey1716EE9E:
+    Type: String
+    Description: S3 key for asset version "a9d09885d608ce7356638bfc68edb313949d129f806857bb03e6dcdf3dfa2c2c"
+  AssetParametersa9d09885d608ce7356638bfc68edb313949d129f806857bb03e6dcdf3dfa2c2cArtifactHashE4CAB30E:
+    Type: String
+    Description: Artifact hash for asset "a9d09885d608ce7356638bfc68edb313949d129f806857bb03e6dcdf3dfa2c2c"
+  AssetParametersbbe5ce91915ba559699d55fdedb8f577e390bd248b618491c392163b1e0766f9S3Bucket77FED3FE:
+    Type: String
+    Description: S3 bucket for asset "bbe5ce91915ba559699d55fdedb8f577e390bd248b618491c392163b1e0766f9"
+  AssetParametersbbe5ce91915ba559699d55fdedb8f577e390bd248b618491c392163b1e0766f9S3VersionKey10E070C2:
+    Type: String
+    Description: S3 key for asset version "bbe5ce91915ba559699d55fdedb8f577e390bd248b618491c392163b1e0766f9"
+  AssetParametersbbe5ce91915ba559699d55fdedb8f577e390bd248b618491c392163b1e0766f9ArtifactHashC044107D:
+    Type: String
+    Description: Artifact hash for asset "bbe5ce91915ba559699d55fdedb8f577e390bd248b618491c392163b1e0766f9"
+  AssetParametersbb9588fb39e9a9b342547ad6d0987ea4a0bbb9a6af2a9d7d62acce975adf7951S3BucketA5C9E24F:
+    Type: String
+    Description: S3 bucket for asset "bb9588fb39e9a9b342547ad6d0987ea4a0bbb9a6af2a9d7d62acce975adf7951"
+  AssetParametersbb9588fb39e9a9b342547ad6d0987ea4a0bbb9a6af2a9d7d62acce975adf7951S3VersionKey794EBCB0:
+    Type: String
+    Description: S3 key for asset version "bb9588fb39e9a9b342547ad6d0987ea4a0bbb9a6af2a9d7d62acce975adf7951"
+  AssetParametersbb9588fb39e9a9b342547ad6d0987ea4a0bbb9a6af2a9d7d62acce975adf7951ArtifactHashE03B0B53:
+    Type: String
+    Description: Artifact hash for asset "bb9588fb39e9a9b342547ad6d0987ea4a0bbb9a6af2a9d7d62acce975adf7951"
+  AssetParameterse43c6662e594dbf68f0a676d84270161f7359abb669b6025f0bf2a0c063ed5fdS3BucketB049C15C:
+    Type: String
+    Description: S3 bucket for asset "e43c6662e594dbf68f0a676d84270161f7359abb669b6025f0bf2a0c063ed5fd"
+  AssetParameterse43c6662e594dbf68f0a676d84270161f7359abb669b6025f0bf2a0c063ed5fdS3VersionKey27A2AA32:
+    Type: String
+    Description: S3 key for asset version "e43c6662e594dbf68f0a676d84270161f7359abb669b6025f0bf2a0c063ed5fd"
+  AssetParameterse43c6662e594dbf68f0a676d84270161f7359abb669b6025f0bf2a0c063ed5fdArtifactHash8BC7B9D2:
+    Type: String
+    Description: Artifact hash for asset "e43c6662e594dbf68f0a676d84270161f7359abb669b6025f0bf2a0c063ed5fd"
+  AssetParametersa95de47d471ae8e55cb2e13e153f7668fa0fc6c788a830b92ece3c9a47699cc6S3Bucket1B9EC1FC:
+    Type: String
+    Description: S3 bucket for asset "a95de47d471ae8e55cb2e13e153f7668fa0fc6c788a830b92ece3c9a47699cc6"
+  AssetParametersa95de47d471ae8e55cb2e13e153f7668fa0fc6c788a830b92ece3c9a47699cc6S3VersionKey3007C1D2:
+    Type: String
+    Description: S3 key for asset version "a95de47d471ae8e55cb2e13e153f7668fa0fc6c788a830b92ece3c9a47699cc6"
+  AssetParametersa95de47d471ae8e55cb2e13e153f7668fa0fc6c788a830b92ece3c9a47699cc6ArtifactHash6E76E6D2:
+    Type: String
+    Description: Artifact hash for asset "a95de47d471ae8e55cb2e13e153f7668fa0fc6c788a830b92ece3c9a47699cc6"
+  AssetParameters42fd53a539fd1615abc59c6f8985f96555b9204bab97a7ee315fb2051c3140c7S3Bucket0DDA773A:
+    Type: String
+    Description: S3 bucket for asset "42fd53a539fd1615abc59c6f8985f96555b9204bab97a7ee315fb2051c3140c7"
+  AssetParameters42fd53a539fd1615abc59c6f8985f96555b9204bab97a7ee315fb2051c3140c7S3VersionKey7A45F6B9:
+    Type: String
+    Description: S3 key for asset version "42fd53a539fd1615abc59c6f8985f96555b9204bab97a7ee315fb2051c3140c7"
+  AssetParameters42fd53a539fd1615abc59c6f8985f96555b9204bab97a7ee315fb2051c3140c7ArtifactHash02416A96:
+    Type: String
+    Description: Artifact hash for asset "42fd53a539fd1615abc59c6f8985f96555b9204bab97a7ee315fb2051c3140c7"
+  AssetParameterse4889c5743ff0ae363c85756cf624962299b28377ecd991aff3f2697252ebe19S3BucketEA7FE36F:
+    Type: String
+    Description: S3 bucket for asset "e4889c5743ff0ae363c85756cf624962299b28377ecd991aff3f2697252ebe19"
+  AssetParameterse4889c5743ff0ae363c85756cf624962299b28377ecd991aff3f2697252ebe19S3VersionKey56D4FDFB:
+    Type: String
+    Description: S3 key for asset version "e4889c5743ff0ae363c85756cf624962299b28377ecd991aff3f2697252ebe19"
+  AssetParameterse4889c5743ff0ae363c85756cf624962299b28377ecd991aff3f2697252ebe19ArtifactHashB2661FCD:
+    Type: String
+    Description: Artifact hash for asset "e4889c5743ff0ae363c85756cf624962299b28377ecd991aff3f2697252ebe19"
+  AssetParametersda5d919703b1d55b4a7e3e7ce423f89c4af8d5cbc1eb21ee58608f6a57b6cdb6S3Bucket1D837973:
+    Type: String
+    Description: S3 bucket for asset "da5d919703b1d55b4a7e3e7ce423f89c4af8d5cbc1eb21ee58608f6a57b6cdb6"
+  AssetParametersda5d919703b1d55b4a7e3e7ce423f89c4af8d5cbc1eb21ee58608f6a57b6cdb6S3VersionKey9EBD3F93:
+    Type: String
+    Description: S3 key for asset version "da5d919703b1d55b4a7e3e7ce423f89c4af8d5cbc1eb21ee58608f6a57b6cdb6"
+  AssetParametersda5d919703b1d55b4a7e3e7ce423f89c4af8d5cbc1eb21ee58608f6a57b6cdb6ArtifactHash2DFBF3F4:
+    Type: String
+    Description: Artifact hash for asset "da5d919703b1d55b4a7e3e7ce423f89c4af8d5cbc1eb21ee58608f6a57b6cdb6"
+  AssetParameters2709f056df3806032cbdacdaaf84f188791556024f6ab1c62200ce027ae909d9S3BucketD9AED926:
+    Type: String
+    Description: S3 bucket for asset "2709f056df3806032cbdacdaaf84f188791556024f6ab1c62200ce027ae909d9"
+  AssetParameters2709f056df3806032cbdacdaaf84f188791556024f6ab1c62200ce027ae909d9S3VersionKeyCADEB991:
+    Type: String
+    Description: S3 key for asset version "2709f056df3806032cbdacdaaf84f188791556024f6ab1c62200ce027ae909d9"
+  AssetParameters2709f056df3806032cbdacdaaf84f188791556024f6ab1c62200ce027ae909d9ArtifactHash1CC37FBC:
+    Type: String
+    Description: Artifact hash for asset "2709f056df3806032cbdacdaaf84f188791556024f6ab1c62200ce027ae909d9"
+Outputs:
+  Region:
+    Description: CloudFormation provider root stack Region
+    Value:
+      Ref: AWS::Region
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-Region
+  StackName:
+    Description: CloudFormation provider root stack ID
+    Value:
+      Ref: AWS::StackName
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-StackName
+  StackId:
+    Description: CloudFormation provider root stack name
+    Value:
+      Ref: AWS::StackId
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-StackId
+  DeploymentBucketName:
+    Description: CloudFormation provider root stack deployment bucket name
+    Value: amplify-amplifyexportest-bruh-101952-deployment2
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-DeploymentBucketName
+  AuthRoleArn:
+    Value:
+      Fn::GetAtt:
+        - AuthRole
+        - Arn
+  UnauthRoleArn:
+    Value:
+      Fn::GetAtt:
+        - UnauthRole
+        - Arn
+  AuthRoleName:
+    Value:
+      Ref: AuthRole
+  UnauthRoleName:
+    Value:
+      Ref: UnauthRole
+

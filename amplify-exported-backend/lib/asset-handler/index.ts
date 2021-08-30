@@ -7,9 +7,11 @@ import { Construct, NestedStack } from "@aws-cdk/core";
 import { CategoryStackMapping } from "../types/category-stack-mapping";
 import { v4 } from "uuid";
 import { IBucket } from "@aws-cdk/aws-s3";
+import * as _ from 'lodash'
 const {
   FUNCTION_CATEGORY,
   API_CATEGORY,
+  AUTH_CATEGORY,
   AMPLIFY_BUILDS,
   AMPLIFY_APPSYNC_FILES,
   STACK_PARAMETERS,
@@ -122,8 +124,22 @@ function uploadAppSyncFiles(
       parameters[STACK_PARAMETERS.API.DEPLOYMENT_ROOT_KEY] = destinationKey;
     }
   }
-
   return bucketDeployment;
+}
+
+function uploadAuthTriggerFiles(
+  scope: Construct,
+  includeProps: CfnIncludeProps,
+  resourceName: string,
+  backendPath: string,
+){
+  // const logicalId = `${AUTH_CATEGORY.NAME}${resourceName}`;
+  // const nestedStacks = includeProps.loadNestedStacks;
+  // const verificationBucketName = _.get(includeProps.loadNestedStacks, [logicalId, 'parameters', AUTH_VERIFICATION_BUCKET_NAME]);
+  // if () {
+  // }
+
+  // return;
 }
 
 function validateFilesAndReturnPath(filePath: string): string {
@@ -147,7 +163,7 @@ const assetHandlerMap: {
       resourceName: string,
       backendPath: string,
       bucket: IBucket
-    ) => BucketDeployment;
+    ) => BucketDeployment | undefined;
   };
 } = {
   function: {
@@ -157,6 +173,9 @@ const assetHandlerMap: {
   api: {
     AppSync: uploadAppSyncFiles,
   },
+  // auth: {
+  //   Cognito: uploadAuthTriggerFiles,
+  // }
 };
 
 export function assetHandler(

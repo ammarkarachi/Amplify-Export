@@ -1,11 +1,13 @@
-import { Bucket } from "@aws-cdk/aws-s3";
+import { Bucket, IBucket } from "@aws-cdk/aws-s3";
 import {
   CfnInclude,
   IncludedNestedStack,
 } from "@aws-cdk/cloudformation-include";
 import * as cdk from "@aws-cdk/core";
 import { Stack } from "@aws-cdk/core";
+import * as _ from 'lodash';
 import { AmplifyExportedBackendProps } from "./amplify-exported-backend-props";
+import { AmplifyExportAssetHandler } from "./asset-handler/amplify-export-asset-handler";
 import { createAssetsAndUpdateParameters } from "./asset-manager";
 import { BaseAmplifyExportBackend } from "./base-exported-backend";
 import { Constants } from "./constants";
@@ -17,6 +19,7 @@ const {
   API_CATEGORY,
   AUTH_CATEGORY,
   FUNCTION_CATEGORY,
+  PARAMETERS_DEPLOYMENT_BUCKET_NAME
 } = Constants;
 
 /**
@@ -80,7 +83,6 @@ export class AmplifyExportedBackend
   extends BaseAmplifyExportBackend
   implements IAmplifyExportedBackend
 {
-  rootStack: Stack;
   constructor(
     scope: cdk.Construct,
     id: string,
@@ -88,50 +90,41 @@ export class AmplifyExportedBackend
   ) {
     super(scope, id, props.path, props.stage);
 
-
-
-    const stackProps = this.exportBackendManifest.props;
-    const deploymentBucketName = stackProps.parameters
-      ? stackProps.parameters["DeploymentBucketName"]
-      : undefined;
-
-    assert(deploymentBucketName);
-
-    const rootStack = new cdk.Stack(scope, "AmplifyStack", {
+    this.rootStack = new cdk.Stack(scope, "AmplifyStack", {
       ...props,
       stackName: this.exportBackendManifest.stackName,
     });
 
-    const bucket = Bucket.fromBucketName(
-      rootStack,
-      "deploymentBucket",
-      deploymentBucketName
-    );
-    const categoryStackMappingWithDeployments = createAssetsAndUpdateParameters(
-      rootStack,
-      this.exportBackendManifest.props,
-      this.categoryStackMappings,
-      this.exportPath,
-      bucket
-    );
+    this.deploymentBucket = this.referenceDeploymentBucket();
+    const categoryStackMappingWithDeployment = this.createAssetsAndUpdateParameters();
+    console.log(JSON.stringify(this.exportBackendManifest, null, 4));
+
     const include = new CfnInclude(
-      rootStack,
+      this.rootStack,
       "AmplifyCfnInclude",
       this.exportBackendManifest.props
     );
     this.cfnInclude = include;
+    
+    this.setDependencies(include, categoryStackMappingWithDeployment);
 
-    // add dependency to nested stack for each deployment
-    categoryStackMappingWithDeployments.forEach((stackMapping) => {
-      if (stackMapping.bucketDeployment) {
-        const stack = include.getResource(
-          stackMapping.category + stackMapping.resourceName
-        );
-        stack.node.addDependency(stackMapping.bucketDeployment);
-      }
-    });
+    this.applyTags(this.rootStack, props.stage);
+  }
+  referenceDeploymentBucket(): IBucket {
+     const deploymentBucketName = _.get(
+       this.exportBackendManifest.props.parameters,
+       [PARAMETERS_DEPLOYMENT_BUCKET_NAME]
+     );
 
-    this.applyTags(rootStack, props.stage);
+     if (!deploymentBucketName) {
+       throw new Error("deployment bucket not specified");
+     }
+
+     return Bucket.fromBucketName(
+       this.rootStack,
+       "deployment-bucket",
+       deploymentBucketName
+     );
   }
 
   private applyTags(rootStack: cdk.Stack, env: string = 'dev') {
