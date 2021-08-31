@@ -1,0 +1,28 @@
+{
+  "stackName": "amplify-amplifyexportest-dev-101952",
+  "props": {
+    "templateFile": "amplify-export-amplifyexportest/root-stack-template.json",
+    "parameters": {
+      "AuthRoleName": "amplify-amplifyexportest-dev-101952-authRole",
+      "UnauthRoleName": "amplify-amplifyexportest-dev-101952-unauthRole",
+      "DeploymentBucketName": "amplify-amplifyexportest-dev-101952-deployment"
+    },
+    "preserveLogicalIds": true,
+    "loadNestedStacks": {
+      "NetworkStack": {
+        "templateFile": "amplify-export-amplifyexportest/amplify-cfn-templates/networkingStackTemplate.json",
+        "parameters": {},
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "apicontainer3e838c8d": {
+        "templateFile": "amplify-export-amplifyexportest/api/container3e838c8d/container3e838c8d-cloudformation-template.json",
+        "parameters": {
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      }
+    }
+  }
+}

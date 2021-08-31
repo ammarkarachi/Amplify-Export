@@ -9,7 +9,8 @@ export const Constants = {
     API: {
       DEPLOYMENT_BUCKET_NAME: "S3DeploymentBucket",
       DEPLOYMENT_ROOT_KEY: "S3DeploymentRootKey",
-    },
+      PARAM_ZIP_PATH: "ParamZipPath",
+    }
   },
   PARAMETERS_DEPLOYMENT_BUCKET_NAME: 'DeploymentBucketName',
   PARAMTERS_AUTH_VERIFICATION_BUCKET_NAME: 'verificationBucketName',

@@ -25,6 +25,7 @@ const {
   AMPLIFY_APPSYNC_FILES,
   AMPLIFY_AUTH_ASSETS,
   STACK_PARAMETERS,
+  AMPLIFY_AUXILIARY_LAMBDAS,
   PARAMETERS_DEPLOYMENT_BUCKET_NAME,
   PARAMTERS_AUTH_VERIFICATION_BUCKET_NAME,
 } = Constants;
@@ -43,6 +44,7 @@ export class BaseAmplifyExportBackend extends Construct {
   protected exportPath: string;
   protected exportBackendManifest: ExportManifest;
   protected exportTags: ExportTag[];
+  protected auxiliaryDeployment?: BucketDeployment;
   deploymentBucket: any;
   rootStack: Stack;
   readonly env?: string
@@ -54,7 +56,7 @@ export class BaseAmplifyExportBackend extends Construct {
   ) {
     super(scope, id);
 
-    this.env = 'st5';
+    this.env = stage;
     this.exportPath = path.resolve(exportPath);
     const exportBackendManifest = this.getExportedDataFromFile<ExportManifest>(
       AMPLIFY_EXPORT_MANIFEST_FILE
@@ -101,6 +103,9 @@ export class BaseAmplifyExportBackend extends Construct {
                   categoryStack.resourceName
                 );
                 break;
+              case API_CATEGORY.SERVICE.ELASTIC_CONTAINER:
+                deployment = this.uploadElasticContainerFiles(categoryStack.resourceName);
+                break;
             }
             break;
 
@@ -120,8 +125,58 @@ export class BaseAmplifyExportBackend extends Construct {
         };
       }
     );
-
+    this.auxiliaryDeployment = this.createAuxiliaryFileAsset();
     return categoryWithDeployment;
+  }
+
+  createAuxiliaryFileAsset(): BucketDeployment | undefined {
+    const auxiliaryFilePath = path.join(this.exportPath, AMPLIFY_AUXILIARY_LAMBDAS);
+    if (fs.existsSync(auxiliaryFilePath)) {
+      const deployment = new BucketDeployment(this.rootStack, "auxiliary-lambdas", {
+        destinationBucket: this.deploymentBucket,
+        sources: [Source.asset(auxiliaryFilePath)],
+        prune: false
+      })
+      return deployment;
+    }
+    return;
+  }
+
+  private uploadElasticContainerFiles(resourceName: string): BucketDeployment | undefined {
+    const filePath = path.join(
+      this.exportPath,
+      API_CATEGORY.NAME,
+      resourceName,
+      AMPLIFY_BUILDS
+    );
+    const buildFile = path.join(
+      filePath,
+      this.validateFilesAndReturnPath(filePath)
+    );
+    const deployment = new BucketDeployment(
+      this.rootStack,
+      `${resourceName}-deployment`,
+      {
+        destinationBucket: this.deploymentBucket,
+        sources: [Source.asset(filePath)],
+        destinationKeyPrefix: AMPLIFY_BUILDS,
+        prune: false,
+      }
+    );
+    const stacks = this.exportBackendManifest.props.loadNestedStacks;
+    const logicalId = `${API_CATEGORY.NAME}${resourceName}`;
+
+    if (stacks) {
+      const parameters = stacks[logicalId].parameters;
+      if (parameters) {
+        // parameters[STACK_PARAMETERS.FUNCTION.DEPLOYMENT_BUCKET_NAME] =
+        //   this.deploymentBucket.bucketName;
+        parameters[
+          STACK_PARAMETERS.API.PARAM_ZIP_PATH
+        ] = `${AMPLIFY_BUILDS}/${path.basename(buildFile)}`;
+      }
+    }
+    return deployment;
   }
 
   protected setDependencies(
@@ -135,9 +190,13 @@ export class BaseAmplifyExportBackend extends Construct {
           stackMapping.category + stackMapping.resourceName
         );
         stack.node.addDependency(stackMapping.bucketDeployment);
+        if (this.auxiliaryDeployment && stackMapping.category === API_CATEGORY.NAME && stackMapping.service === API_CATEGORY.SERVICE.ELASTIC_CONTAINER) {
+          stack.node.addDependency(this.auxiliaryDeployment)
+        }
       }
     });
   }
+
 
   private uploadLambdaZip(resourceName: string): BucketDeployment {
     const filePath = path.join(
@@ -386,7 +445,7 @@ export class BaseAmplifyExportBackend extends Construct {
     if (nestedStacks) {
       Object.keys(nestedStacks).forEach((nestedStackKey) => {
         const nestedStack = nestedStacks[nestedStackKey];
-        if (nestedStack.parameters) {
+        if (nestedStack.parameters && "env" in nestedStack.parameters) {
           nestedStack.parameters["env"] = this.env;
         }
       });

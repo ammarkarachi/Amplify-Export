@@ -110,6 +110,7 @@ export class AmplifyExportedBackend
 
     this.applyTags(this.rootStack, props.stage);
   }
+  
   referenceDeploymentBucket(): IBucket {
      const deploymentBucketName = _.get(
        this.exportBackendManifest.props.parameters,

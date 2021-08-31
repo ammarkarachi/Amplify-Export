@@ -6,6 +6,6 @@ import { AmplifyExportedBackend } from '../lib/exported-backend';
 const app = new cdk.App();
 
 const amplifyBackend = new AmplifyExportedBackend(app, "AmplifyBackend", {
-  stage: 'dev',
-  path: "./amplify-stuff",
+  stage: 'st1',
+  path: "./amplify-export-amplifyexportest",
 });
